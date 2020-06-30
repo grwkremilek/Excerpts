@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<title>List by Tag</title>
+<style>
+table th, table td {
+	padding: 5px;
+}
+</style>
+</head>
+
+<body>
+	<div align="right">
+		<a href="/">Home</a>
+	</div>
+
+	<div th:if="${#lists.isEmpty(excerpts)}">There is no such tag in
+		the database.</div>
+	<div th:unless="${#lists.isEmpty(excerpts)}">
+		<p>
+			<span th:text="${counts}">number of excerpts </span> excerpts with
+			the tag were found
+		</p>
+		<table
+			style="width: 100%; border: 1px solid black; border-collapse: collapse;">
+			<thead>
+				<tr>
+					<th>ExcerptId</th>
+					<th>Author</th>
+					<th>Title</th>
+					<th>Text</th>
+					<th>Tags</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="excerpt : ${excerpts}">
+					<td style="border: 1px solid black;" th:text="${excerpt.excerptID}">ExcerptId</td>
+					<td style="border: 1px solid black;" th:text="${excerpt.author}">Author</td>
+					<td style="border: 1px solid black;" th:text="${excerpt.title}">Title</td>
+					<td style="border: 1px solid black;" th:text="${excerpt.text}">Text</td>
+					<td style="border: 1px solid black;" th:text="${excerpt.tags}">Tags</td>
+					<td style="border: 1px solid black;"><a
+						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{tags}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, tags=${excerpt.tags})}">Edit</a>
+						<a
+						th:href="@{/delete/{excerptID}/{author}/{title}(excerptID=${excerpt.excerptID}, author='author', title=${excerpt.title})}">Delete</a></td>
+
+
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<title>Excerpt index</title>
+</head>
+
+<body>
+	<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
+		method="post">
+		<table>
+			<tr>
+				<td><a href="/getAll">Display all excerpts in the database</a></td>
+			</tr>
+			<tr>
+				<td><a href="createExcerpt">Create a new excerpt</a></td>
+			</tr>
+			<tr>
+				<td>Enter the name of the book</td>
+				<td><input type="text" th:field="*{title}" /></td>
+				<td><button type="submit" name="parameter" value="title">Submit</button></td>
+				<td th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></td>
+			</tr>
+			<tr>
+				<td>Enter the author's name</td>
+				<td><input type="text" th:field="*{author}" /></td>
+				<td><button type="submit" name="parameter" value="author">Submit</button></td>
+				<td th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></td>
+			</tr>
+			<tr>
+				<td>Enter a tag</td>
+				<td><input type="text" th:field="*{tags}" /></td>
+				<td><button type="submit" name="parameter" value="tag">Submit</button></td>
+				<td th:if="${#fields.hasErrors('tags')}" th:errors="*{tags}"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td><button type="reset">Reset</button></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

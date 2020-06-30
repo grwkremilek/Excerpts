@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<title>List of all excerpts</title>
+<style>
+table th, table td {
+	padding: 5px;
+}
+</style>
+</head>
+
+<body>
+	<div align="right">
+		<a href="/">Home</a>
+	</div>
+
+	<div th:if="${#lists.isEmpty(excerpts)}">The database is empty.</div>
+	<div th:unless="${#lists.isEmpty(excerpts)}">
+		<p>
+			<span th:text="${counts}">number of excerpts </span> excerpts were
+			found
+		</p>
+		<table
+			style="width: 100%; border: 1px solid black; border-collapse: collapse;">
+			<thead style="border: 1px solid black;">
+				<tr>
+					<th>Author</th>
+					<th>Title</th>
+					<th>Text</th>
+					<th>Tags</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="excerpt : ${excerpts}">
+					<td style="border: 1px solid black;" th:text="${excerpt.author}">Author</td>
+					<td style="border: 1px solid black;" th:text="${excerpt.title}">Title</td>
+					<td style="border: 1px solid black;" th:text="${excerpt.text}">Text</td>
+					<td style="border: 1px solid black;" th:text="${excerpt.tags}">Tags</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

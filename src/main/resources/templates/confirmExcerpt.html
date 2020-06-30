@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<title>An excerpt added to the database</title>
+</head>
+
+<body>
+	<div align="left">
+		<h1>An excerpt added to the database</h1>
+		<p th:text="'AUTHOR: ' + ${excerpt.author}" />
+		<p th:text="'TITLE: ' + ${excerpt.title}" />
+		<p th:text="'TEXT: ' + ${excerpt.text}" />
+		<p th:text="'TAGS: ' + ${excerpt.tags}" />
+	</div>
+	<div align="left">
+		<a href="createExcerpt">Create another excerpt</a> <br /> <br />
+	</div>
+	<div align="left">
+		<a href="/">Home</a>
+	</div>
+</body>
+</html>
