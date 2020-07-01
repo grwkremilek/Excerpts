@@ -43,8 +43,6 @@ public class ExcerptController {
 	public String saveNewExcerpt(@RequestParam(name = "excerptID", defaultValue = "0") Integer excerptID,
 			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
 
-		System.out.println(excerpt);
-
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
@@ -176,5 +174,11 @@ public class ExcerptController {
 		model.addAttribute("counts", counts);
 		model.addAttribute("tags", tags);
 		return "getAll";
+	}
+	
+	/* delete all entries in the tables in the database and reset auto-increment*/
+	@RequestMapping(value = "/truncateTables")
+	public void truncateTables() {
+		dao.emptyExcerptsDb();
 	}
 }

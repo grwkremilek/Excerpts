@@ -17,13 +17,14 @@ public class ExcerptDAO implements DAO<Excerpt> {
 	@Override
 	public List<Excerpt> getAll() {
 		String SQL = "SELECT e.*, t.description AS tags from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID";
-		/*
-		 * String SQL =
-		 * "select excerptID, author, title, text, description as tags from tagmap natural join excerpt natural join tag;"
-		 * ;
-		 */
-		List<Excerpt> extracts = jdbcTemplate.query(SQL, new ExcerptMapper());
-		return extracts;
+		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new ExcerptMapper());
+
+		for (int i = 0, j = 1; i < excerpts.size() - 1; i++, j++)
+			if (excerpts.get(i).getExcerptID() == excerpts.get(j).getExcerptID()) {
+				excerpts.get(i).mergeTags(excerpts.get(j));
+				excerpts.remove(j);
+			}
+		return excerpts;
 	}
 
 	@Override
@@ -45,22 +46,12 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		jdbcTemplate.update(setExcerptIdSQL);
 
 		for (String tag : tags) {
-			String insertTagSQL = "INSERT IGNORE INTO Tag SET description = ?";
-
-			// if the tags is already present in the tag table, add a new excerptID, else
-			// create a new row
-			if (jdbcTemplate.update(insertTagSQL, tag) == 0) {
-				String getTagID = "SELECT tagID FROM tag WHERE description=?";
-				int tagID = jdbcTemplate.queryForObject(getTagID, new Object[] { tag }, Integer.class);
-				String insertTagMapSQL = "INSERT INTO tagmap (excerptID, tagID) VALUES(@excerptID, ?)";
-				jdbcTemplate.update(insertTagMapSQL, tagID);
-
-			} else {
-				String setTagIdSQL = "SET @tagID = LAST_INSERT_ID();";
-				jdbcTemplate.update(setTagIdSQL);
-				String insertTagMapSQL = "INSERT INTO tagmap (excerptID, tagID) VALUES(@excerptID, @tagID)";
-				jdbcTemplate.update(insertTagMapSQL);
-			}
+			String insertTagSQL = "INSERT INTO Tag SET description = ?";
+			jdbcTemplate.update(insertTagSQL, tag);
+			String setTagIdSQL = "SET @tagID = LAST_INSERT_ID();";
+			jdbcTemplate.update(setTagIdSQL);
+			String insertTagMapSQL = "INSERT INTO tagmap (excerptID, tagID) VALUES(@excerptID, @tagID)";
+			jdbcTemplate.update(insertTagMapSQL);
 		}
 	}
 
@@ -90,26 +81,25 @@ public class ExcerptDAO implements DAO<Excerpt> {
 	@Override
 	public List<Excerpt> getByAuthor(String... params) {
 		String author = params[0];
-		/* String SQL = "SELECT * FROM Excerpt WHERE author = ? ORDER BY excerptID"; */
 		String SQL = "SELECT e.*, t.description AS tags from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE author = ? ORDER BY excerptID";
-		List<Excerpt> extracts = jdbcTemplate.query(SQL, new String[] { author }, new ExcerptMapper());
-		return extracts;
+		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { author }, new ExcerptMapper());
+		return excerpts;
 	}
 
 	@Override
 	public List<Excerpt> getByTitle(String... params) {
 		String title = params[0];
 		String SQL = "SELECT e.*, t.description AS tags from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE title = ? ORDER BY excerptID";
-		List<Excerpt> extracts = jdbcTemplate.query(SQL, new String[] { title }, new ExcerptMapper());
-		return extracts;
+		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { title }, new ExcerptMapper());
+		return excerpts;
 	}
 
 	public List<Excerpt> getByTag(String... params) {
 		String tag = params[0];
 		System.out.println(tag);
 		String SQL = "SELECT e.*, t.description AS tags from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE t.description = ? ORDER BY excerptID";
-		List<Excerpt> extracts = jdbcTemplate.query(SQL, new String[] { tag }, new ExcerptMapper());
-		return extracts;
+		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { tag }, new ExcerptMapper());
+		return excerpts;
 	}
 
 	@Override
@@ -118,5 +108,18 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		return jdbcTemplate.queryForList(
 				"SELECT author, COUNT(*) as count FROM Excerpt WHERE title = ? GROUP BY author",
 				new Object[] { title });
+	}
+
+	public void emptyExcerptsDb() {
+		String removeChecksSQL = "SET FOREIGN_KEY_CHECKS = 0";
+		jdbcTemplate.update(removeChecksSQL);
+		String tagmapSQL = "TRUNCATE table Tagmap";
+		jdbcTemplate.update(tagmapSQL);
+		String excerptSQL = "TRUNCATE table Excerpt";
+		jdbcTemplate.update(excerptSQL);
+		String tagSQL = "TRUNCATE table Tag";
+		jdbcTemplate.update(tagSQL);
+		String renewChecksSQL = "SET FOREIGN_KEY_CHECKS = 1";
+		jdbcTemplate.update(renewChecksSQL);
 	}
 }

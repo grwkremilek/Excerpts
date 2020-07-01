@@ -7,7 +7,7 @@ public class Excerpt {
 	private String title;
 	private String text;
 	private String tags;
-	
+
 	public Excerpt() {
 		super();
 	}
@@ -65,5 +65,12 @@ public class Excerpt {
 	public String toString() {
 		return "Excerpt [excerptID=" + excerptID + ", author=" + author + ", title=" + title + ", text=" + text
 				+ ", tags=" + tags + "]";
+	}
+
+	public void mergeTags(Excerpt other) {
+
+		this.tags += "; ";
+		this.tags += other.tags;
+
 	}
 }

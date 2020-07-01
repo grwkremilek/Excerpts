@@ -8,39 +8,50 @@
 </head>
 
 <body>
-	<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
-		method="post">
-		<table>
-			<tr>
-				<td><a href="/getAll">Display all excerpts in the database</a></td>
-			</tr>
-			<tr>
-				<td><a href="createExcerpt">Create a new excerpt</a></td>
-			</tr>
-			<tr>
-				<td>Enter the name of the book</td>
-				<td><input type="text" th:field="*{title}" /></td>
-				<td><button type="submit" name="parameter" value="title">Submit</button></td>
-				<td th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></td>
-			</tr>
-			<tr>
-				<td>Enter the author's name</td>
-				<td><input type="text" th:field="*{author}" /></td>
-				<td><button type="submit" name="parameter" value="author">Submit</button></td>
-				<td th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></td>
-			</tr>
-			<tr>
-				<td>Enter a tag</td>
-				<td><input type="text" th:field="*{tags}" /></td>
-				<td><button type="submit" name="parameter" value="tag">Submit</button></td>
-				<td th:if="${#fields.hasErrors('tags')}" th:errors="*{tags}"></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td></td>
-				<td><button type="reset">Reset</button></td>
-			</tr>
-		</table>
-	</form>
+	<div align="right">
+		<form th:action="@{truncateTables}" method="post">
+			<input type="submit" value="Delete all entries in the db"
+				class="btn btn-danger"
+				th:data-confirm-delete="|Are you sure you want to delete all entries in the database?|"
+				onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false" />
+		</form>
+	</div>
+
+	<div align="left">
+		<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
+			method="post">
+			<table>
+				<tr>
+					<td><a href="/getAll">Display all excerpts in the database</a></td>
+				</tr>
+				<tr>
+					<td><a href="createExcerpt">Create a new excerpt</a></td>
+				</tr>
+				<tr>
+					<td>Enter the name of the book</td>
+					<td><input type="text" th:field="*{title}" /></td>
+					<td><button type="submit" name="parameter" value="title">Submit</button></td>
+					<td th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></td>
+				</tr>
+				<tr>
+					<td>Enter the author's name</td>
+					<td><input type="text" th:field="*{author}" /></td>
+					<td><button type="submit" name="parameter" value="author">Submit</button></td>
+					<td th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></td>
+				</tr>
+				<tr>
+					<td>Enter a tag</td>
+					<td><input type="text" th:field="*{tags}" /></td>
+					<td><button type="submit" name="parameter" value="tag">Submit</button></td>
+					<td th:if="${#fields.hasErrors('tags')}" th:errors="*{tags}"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td><button type="reset">Reset</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
 </body>
 </html>

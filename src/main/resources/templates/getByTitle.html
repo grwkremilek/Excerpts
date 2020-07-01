@@ -46,9 +46,7 @@ table th, table td {
 					<td style="border: 1px solid black;"><a
 						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{tags}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, tags=${excerpt.tags})}">Edit</a>
 						<a
-						th:href="@{/delete/{excerptID}/{author}/{title}(excerptID=${excerpt.excerptID}, author='author', title=${excerpt.title})}">Delete</a></td>
-
-
+						th:href="@{/delete/{excerptID}/{author}/{title}(excerptID=${excerpt.excerptID}, author='author', title=${excerpt.title})}" onclick="return confirm('Are you sure you want to delete this excerpt?');">Delete</a></td>
 				</tr>
 			</tbody>
 		</table>
