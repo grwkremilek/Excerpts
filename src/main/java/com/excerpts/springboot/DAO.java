@@ -28,6 +28,8 @@ public interface DAO<T> {
 
 	public List<Map<String, Object>> countSelectedByAuthor(String[] params);
 	
+	public List<T> formatEntries(List<T> excerpts);
+	
 	public void emptyExcerptsDb();
 	
 }

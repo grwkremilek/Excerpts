@@ -68,9 +68,7 @@ public class Excerpt {
 	}
 
 	public void mergeTags(Excerpt other) {
-
 		this.tags += "; ";
 		this.tags += other.tags;
-
 	}
 }
