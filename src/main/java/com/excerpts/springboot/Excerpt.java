@@ -6,18 +6,20 @@ public class Excerpt {
 	private String author;
 	private String title;
 	private String text;
+	private String comments;
 	private String tags;
 
 	public Excerpt() {
 		super();
 	}
 
-	public Excerpt(int excerptID, String author, String title, String text, String tags) {
+	public Excerpt(int excerptID, String author, String title, String text, String comments, String tags) {
 		super();
 		this.excerptID = excerptID;
 		this.author = author;
 		this.title = title;
 		this.text = text;
+		this.comments = comments;
 		this.tags = tags;
 	}
 
@@ -53,6 +55,14 @@ public class Excerpt {
 		this.text = text;
 	}
 
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
 	public String getTags() {
 		return tags;
 	}
@@ -64,7 +74,7 @@ public class Excerpt {
 	@Override
 	public String toString() {
 		return "Excerpt [excerptID=" + excerptID + ", author=" + author + ", title=" + title + ", text=" + text
-				+ ", tags=" + tags + "]";
+				+ ", comments=" + comments + ", tags=" + tags + "]";
 	}
 
 	public void mergeTags(Excerpt other) {

@@ -43,6 +43,7 @@ public class ExcerptController {
 	public String saveNewExcerpt(@RequestParam(name = "excerptID", defaultValue = "0") Integer excerptID,
 			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
 
+		System.out.println(excerpt);
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
@@ -52,19 +53,21 @@ public class ExcerptController {
 		String author = excerpt.getAuthor();
 		String title = excerpt.getTitle();
 		String text = excerpt.getText();
+		String comments = excerpt.getComments();
 		String tags = excerpt.getTags();
 
 		if (excerptID > 0) {
 
-			dao.edit(excerptID, author, title, text, tags);
+			dao.edit(excerptID, author, title, text, comments, tags);
 
 		} else {
-			dao.save(author, title, text, tags);
+			dao.save(author, title, text, comments, tags);
 		}
 
 		model.addAttribute("author", author);
 		model.addAttribute("title", title);
-		model.addAttribute("text", title);
+		model.addAttribute("text", text);
+		model.addAttribute("comments", comments);
 		model.addAttribute("tags", tags);
 
 		return "confirmExcerpt";
@@ -74,13 +77,14 @@ public class ExcerptController {
 	/* list excerpts by an author */
 	@RequestMapping(value = "/getByParameter", method = { RequestMethod.GET,
 			RequestMethod.POST }, params = "parameter=author")
-	public String processAuthor(@RequestParam(name = "author", defaultValue = "author") String author,
+	public String processAuthor(@RequestParam(name = "author") String author,
 			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
 
+		System.out.println(excerpt);
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
-			return "index";
+			return "newExcerptForm";
 		}
 
 		List<Excerpt> excerpts = new ArrayList<Excerpt>();
@@ -96,13 +100,14 @@ public class ExcerptController {
 	/* list excerpts from a book */
 	@RequestMapping(value = "/getByParameter", method = { RequestMethod.GET,
 			RequestMethod.POST }, params = "parameter=title")
-	public String processTitle(@RequestParam(name = "title", defaultValue = "title") String title,
-			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
+	public String processTitle(@RequestParam(name = "title") String title, @ModelAttribute("excerpt") Excerpt excerpt,
+			BindingResult result, Model model) {
 
+		System.out.println(excerpt);
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
-			return "index";
+			return "newExcerptForm";
 		}
 
 		List<Excerpt> excerpts = new ArrayList<Excerpt>();
@@ -117,13 +122,13 @@ public class ExcerptController {
 	/* list excerpts with a tag */
 	@RequestMapping(value = "/getByParameter", method = { RequestMethod.GET,
 			RequestMethod.POST }, params = "parameter=tag")
-	public String processTag(@RequestParam(name = "tags", defaultValue = "tag") String tags,
-			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
-
+	public String processTag(@RequestParam(name = "tags") String tags, @ModelAttribute("excerpt") Excerpt excerpt,
+			BindingResult result, Model model) {
+		
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
-			return "index";
+			return "newExcerptForm";
 		}
 
 		List<Excerpt> excerpts = new ArrayList<Excerpt>();
@@ -155,10 +160,10 @@ public class ExcerptController {
 	/* display excerpt page from edit button */
 	@RequestMapping(value = "/edit/{excerptID}/{author}/{title}/{text}/{tags}")
 	public String getEdit(@PathVariable("excerptID") int excerptID, @PathVariable("author") String author,
-			@PathVariable("title") String title, @PathVariable("text") String text, @PathVariable("tags") String tags,
-			Model model) {
+			@PathVariable("title") String title, @PathVariable("text") String text,
+			@PathVariable("text") String comments, @PathVariable("tags") String tags, Model model) {
 
-		model.addAttribute("excerpt", new Excerpt(excerptID, author, title, text, tags));
+		model.addAttribute("excerpt", new Excerpt(excerptID, author, title, text, comments, tags));
 		return "editExcerptForm";
 	}
 
@@ -175,8 +180,8 @@ public class ExcerptController {
 		model.addAttribute("tags", tags);
 		return "getAll";
 	}
-	
-	/* delete all entries in the tables in the database and reset auto-increment*/
+
+	/* delete all entries in the tables in the database and reset auto-increment */
 	@RequestMapping(value = "/truncateTables")
 	public void truncateTables() {
 		dao.emptyExcerptsDb();

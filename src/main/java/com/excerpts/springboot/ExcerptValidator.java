@@ -19,8 +19,7 @@ public class ExcerptValidator implements Validator {
 
 		Excerpt excerpt = (Excerpt) obj;
 
-		if (excerpt.getAuthor() != null && !excerpt.getAuthor().equals("")) {
-
+		if (excerpt.getAuthor() != null) {
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "author", "error.author",
 					"Please enter the name of the author.");
 
@@ -31,7 +30,7 @@ public class ExcerptValidator implements Validator {
 			}
 		}
 
-		if (excerpt.getTitle() != null && !excerpt.getTitle().equals("")) {
+		if (excerpt.getTitle() != null) {
 
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "title", "error.title",
 					"Please enter the title of the book.");
@@ -55,14 +54,21 @@ public class ExcerptValidator implements Validator {
 			}
 		}
 
-		if (excerpt.getTags() != null && !excerpt.getTags().equals("")) {
-
-			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "tags", "error.text", "Please enter at least one tag");
+		if (excerpt.getTags() != null) {
 
 			byte[] bytesTags = excerpt.getTags().getBytes(StandardCharsets.UTF_8);
 			int tagsInBytes = bytesTags.length;
 			if (tagsInBytes > 45) {
 				errors.rejectValue("tags", "field.max.length", "There are too many tags.");
+			}
+		}
+
+		if (excerpt.getComments() != null) {
+
+			byte[] bytesComments = excerpt.getComments().getBytes(StandardCharsets.UTF_8);
+			int commentsInBytes = bytesComments.length;
+			if (commentsInBytes > 1000) {
+				errors.rejectValue("comments", "field.max.length", "The comments are too long.");
 			}
 		}
 	}

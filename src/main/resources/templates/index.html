@@ -32,22 +32,30 @@
 					<td><input type="text" th:field="*{title}" /></td>
 					<td><button type="submit" name="parameter" value="title">Submit</button></td>
 					<td th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></td>
+					<td><button type="reset">Reset</button></td>
 				</tr>
+			</table>
+		</form>
+		<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
+			method="post">
+			<table>
 				<tr>
 					<td>Enter the author's name</td>
 					<td><input type="text" th:field="*{author}" /></td>
 					<td><button type="submit" name="parameter" value="author">Submit</button></td>
 					<td th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></td>
+					<td><button type="reset">Reset</button></td>
 				</tr>
+			</table>
+		</form>
+		<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
+			method="post">
+			<table>
 				<tr>
 					<td>Enter a tag</td>
 					<td><input type="text" th:field="*{tags}" /></td>
 					<td><button type="submit" name="parameter" value="tag">Submit</button></td>
 					<td th:if="${#fields.hasErrors('tags')}" th:errors="*{tags}"></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
 					<td><button type="reset">Reset</button></td>
 				</tr>
 			</table>
