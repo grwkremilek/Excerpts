@@ -38,12 +38,11 @@ public class ExcerptController {
 		return "newExcerptForm";
 	}
 
-	/* save or update an excerpt form */
+	/* save an excerpt form */
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String saveNewExcerpt(@RequestParam(name = "excerptID", defaultValue = "0") Integer excerptID,
 			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
 
-		System.out.println(excerpt);
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
@@ -80,7 +79,6 @@ public class ExcerptController {
 	public String processAuthor(@RequestParam(name = "author") String author,
 			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
 
-		System.out.println(excerpt);
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
@@ -103,7 +101,6 @@ public class ExcerptController {
 	public String processTitle(@RequestParam(name = "title") String title, @ModelAttribute("excerpt") Excerpt excerpt,
 			BindingResult result, Model model) {
 
-		System.out.println(excerpt);
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
@@ -124,7 +121,7 @@ public class ExcerptController {
 			RequestMethod.POST }, params = "parameter=tag")
 	public String processTag(@RequestParam(name = "tags") String tags, @ModelAttribute("excerpt") Excerpt excerpt,
 			BindingResult result, Model model) {
-		
+
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
@@ -138,6 +135,17 @@ public class ExcerptController {
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("counts", counts);
 		return "getByTag";
+	}
+
+	/* display separate comments page */
+	@RequestMapping(value = "/displayComments/{comments}")
+	public String getComments(@PathVariable("comments") String comments,
+			Model model) {
+		
+		System.out.println(comments);
+
+		model.addAttribute("comments", comments);
+		return "displayComments";
 	}
 
 	/* delete an excerpt */
@@ -161,7 +169,7 @@ public class ExcerptController {
 	@RequestMapping(value = "/edit/{excerptID}/{author}/{title}/{text}/{tags}")
 	public String getEdit(@PathVariable("excerptID") int excerptID, @PathVariable("author") String author,
 			@PathVariable("title") String title, @PathVariable("text") String text,
-			@PathVariable("text") String comments, @PathVariable("tags") String tags, Model model) {
+			@PathVariable("comments") String comments, @PathVariable("tags") String tags, Model model) {
 
 		model.addAttribute("excerpt", new Excerpt(excerptID, author, title, text, comments, tags));
 		return "editExcerptForm";

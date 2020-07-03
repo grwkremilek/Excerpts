@@ -21,8 +21,8 @@ table th, table td {
 		the database.</div>
 	<div th:unless="${#lists.isEmpty(excerpts)}">
 		<p>
-			<span th:text="${counts}">number of excerpts </span> excerpts with
-			the tag were found
+			<span th:text="${excerpt.tags}">name of the tag</span>: <span
+				th:text="${counts}">number of excerpts </span> excerpts were found
 		</p>
 		<table
 			style="width: 100%; border: 1px solid black; border-collapse: collapse;">
@@ -32,7 +32,6 @@ table th, table td {
 					<th>Author</th>
 					<th>Title</th>
 					<th>Text</th>
-					<th>Tags</th>
 					<th>Action</th>
 				</tr>
 			</thead>
@@ -42,11 +41,13 @@ table th, table td {
 					<td style="border: 1px solid black;" th:text="${excerpt.author}">Author</td>
 					<td style="border: 1px solid black;" th:text="${excerpt.title}">Title</td>
 					<td style="border: 1px solid black;" th:text="${excerpt.text}">Text</td>
-					<td style="border: 1px solid black;" th:text="${excerpt.tags}">Tags</td>
 					<td style="border: 1px solid black;"><a
+						th:href="@{/displayComments/{comments}(comments=${excerpt.comments})}">Comments</a>
+						<a
 						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{tags}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, tags=${excerpt.tags})}">Edit</a>
 						<a
-						th:href="@{/delete/{excerptID}/{author}/{title}(excerptID=${excerpt.excerptID}, author='author', title=${excerpt.title})}" onclick="return confirm('Are you sure you want to delete this excerpt?');">Delete</a></td>
+						th:href="@{/delete/{excerptID}/{author}/{title}(excerptID=${excerpt.excerptID}, author='author', title=${excerpt.title})}"
+						onclick="return confirm('Are you sure you want to delete this excerpt?');">Delete</a></td>
 
 
 				</tr>
