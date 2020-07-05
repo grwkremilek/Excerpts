@@ -82,7 +82,7 @@ public class ExcerptController {
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
-			return "newExcerptForm";
+			return "index";
 		}
 
 		List<Excerpt> excerpts = new ArrayList<Excerpt>();
@@ -104,7 +104,7 @@ public class ExcerptController {
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
-			return "newExcerptForm";
+			return "index";
 		}
 
 		List<Excerpt> excerpts = new ArrayList<Excerpt>();
@@ -125,7 +125,7 @@ public class ExcerptController {
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
-			return "newExcerptForm";
+			return "index";
 		}
 
 		List<Excerpt> excerpts = new ArrayList<Excerpt>();
@@ -136,13 +136,27 @@ public class ExcerptController {
 		model.addAttribute("counts", counts);
 		return "getByTag";
 	}
+	
+	/* get an excerpt by its excerptID */
+	@RequestMapping(value = "/getByParameter", method = { RequestMethod.GET,
+			RequestMethod.POST }, params = "parameter=excerptID")
+	public String processExcerptID(@RequestParam(name = "excerptID") Integer excerptID, @ModelAttribute("excerpt") Excerpt excerpt,
+			BindingResult result, Model model) {
+		
+		validator.validate(excerpt, result);
+
+		if (result.hasErrors()) {
+			return "index";
+		}
+		Excerpt exc = dao.getByID(excerptID);
+		
+		model.addAttribute("excerpt", exc);
+		return "getByExcerptID";
+	}
 
 	/* display separate comments page */
 	@RequestMapping(value = "/displayComments/{comments}")
-	public String getComments(@PathVariable("comments") String comments,
-			Model model) {
-		
-		System.out.println(comments);
+	public String getComments(@PathVariable("comments") String comments, Model model) {
 
 		model.addAttribute("comments", comments);
 		return "displayComments";

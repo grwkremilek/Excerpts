@@ -19,6 +19,10 @@ public class ExcerptValidator implements Validator {
 
 		Excerpt excerpt = (Excerpt) obj;
 
+		if (excerpt.getExcerptID() == 0) {
+			errors.rejectValue("excerptID", "field.min.value", "Please entrer a valid ID.");
+		}
+
 		if (excerpt.getAuthor() != null) {
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "author", "error.author",
 					"Please enter the name of the author.");

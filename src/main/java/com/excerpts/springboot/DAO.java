@@ -96,4 +96,8 @@ public interface DAO<T> {
 	 */
 	public void emptyExcerptsDb();
 
+	public int countExcerpts();
+	
+	public T getByID(int excerptID);
+
 }

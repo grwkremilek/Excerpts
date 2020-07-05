@@ -97,6 +97,7 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		}
 	}
 
+	@Override
 	public List<Excerpt> getByTag(String... params) {
 		String tag = params[0];
 		String SQL = "SELECT e.*, t.description AS tags from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE t.description = ? ORDER BY excerptID";
@@ -116,6 +117,7 @@ public class ExcerptDAO implements DAO<Excerpt> {
 				new Object[] { title });
 	}
 
+	@Override
 	public List<Excerpt> formatEntries(List<Excerpt> excerpts) {
 
 		List<Excerpt> results = new ArrayList<Excerpt>();
@@ -131,6 +133,7 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		return results;
 	}
 
+	@Override
 	public void emptyExcerptsDb() {
 		String removeChecksSQL = "SET FOREIGN_KEY_CHECKS = 0";
 		jdbcTemplate.update(removeChecksSQL);
@@ -142,5 +145,18 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		jdbcTemplate.update(tagSQL);
 		String renewChecksSQL = "SET FOREIGN_KEY_CHECKS = 1";
 		jdbcTemplate.update(renewChecksSQL);
+	}
+
+	@Override
+	public int countExcerpts() {
+		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Excerpt", Integer.class);
+	}
+
+	@Override
+	public Excerpt getByID(int excerptID) {
+		return jdbcTemplate.queryForObject(
+				"SELECT e.*, t.description AS tags from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE e.excerptID = ?",
+				new Object[] { excerptID }, new ExcerptMapper());
+
 	}
 }

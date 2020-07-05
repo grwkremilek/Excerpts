@@ -60,6 +60,19 @@
 				</tr>
 			</table>
 		</form>
+		<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
+			method="post">
+			<table>
+				<tr>
+					<td>Enter an excerpt ID</td>
+					<td><input type="text" th:field="*{excerptID}" /></td>
+					<td><button type="submit" name="parameter" value="excerptID">Submit</button></td>
+					<td><button type="reset">Reset</button></td>
+					<td th:if="${#fields.hasErrors('excerptID')}"
+						th:errors="*{excerptID}"></td>
+				</tr>
+			</table>
+		</form>
 	</div>
 </body>
 </html>
