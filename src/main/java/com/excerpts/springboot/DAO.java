@@ -80,7 +80,7 @@ public interface DAO<T> {
 	 * @param title
 	 * @return excerpts a list of excerpts
 	 */
-	public List<Map<String, Object>> countSelectedByAuthor(String[] params);
+	public List<Map<String, Object>> countSelectedByAuthor(String... params);
 
 	/**
 	 * Method formatting output from the table Excerpt and the table Tag to create a

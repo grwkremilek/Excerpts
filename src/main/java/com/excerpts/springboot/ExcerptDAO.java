@@ -111,7 +111,7 @@ public class ExcerptDAO implements DAO<Excerpt> {
 	}
 
 	@Override
-	public List<Map<String, Object>> countSelectedByAuthor(String[] params) {
+	public List<Map<String, Object>> countSelectedByAuthor(String... params) {
 		String title = params[0];
 		return jdbcTemplate.queryForList(
 				"SELECT author, COUNT(*) as count FROM Excerpt WHERE title = ? GROUP BY author",
