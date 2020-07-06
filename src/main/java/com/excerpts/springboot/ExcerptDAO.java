@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -154,9 +155,13 @@ public class ExcerptDAO implements DAO<Excerpt> {
 
 	@Override
 	public Excerpt getByID(int excerptID) {
-		return jdbcTemplate.queryForObject(
-				"SELECT e.*, t.description AS tags from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE e.excerptID = ?",
-				new Object[] { excerptID }, new ExcerptMapper());
+		String SQL = "SELECT e.*, t.description AS tags from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE e.excerptID = ?";
 
+		try {
+			Excerpt excerpt = jdbcTemplate.queryForObject(SQL, new Object[] { excerptID }, new ExcerptMapper());
+			return excerpt;
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 }

@@ -18,15 +18,17 @@
 	</div>
 
 	<div align="left">
+		<table>
+			<tr>
+				<td><a href="/getAll">Display all excerpts in the database</a></td>
+			</tr>
+			<tr>
+				<td><a href="createExcerpt">Create a new excerpt</a></td>
+			</tr>
+		</table>
 		<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
 			method="post">
 			<table>
-				<tr>
-					<td><a href="/getAll">Display all excerpts in the database</a></td>
-				</tr>
-				<tr>
-					<td><a href="createExcerpt">Create a new excerpt</a></td>
-				</tr>
 				<tr>
 					<td>Enter the name of the book</td>
 					<td><input type="text" th:field="*{title}" /></td>

@@ -136,20 +136,20 @@ public class ExcerptController {
 		model.addAttribute("counts", counts);
 		return "getByTag";
 	}
-	
+
 	/* get an excerpt by its excerptID */
 	@RequestMapping(value = "/getByParameter", method = { RequestMethod.GET,
 			RequestMethod.POST }, params = "parameter=excerptID")
-	public String processExcerptID(@RequestParam(name = "excerptID") Integer excerptID, @ModelAttribute("excerpt") Excerpt excerpt,
-			BindingResult result, Model model) {
-		
+	public String processExcerptID(@RequestParam(name = "excerptID") Integer excerptID,
+			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
+
 		validator.validate(excerpt, result);
 
 		if (result.hasErrors()) {
 			return "index";
 		}
 		Excerpt exc = dao.getByID(excerptID);
-		
+
 		model.addAttribute("excerpt", exc);
 		return "getByExcerptID";
 	}

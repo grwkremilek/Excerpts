@@ -10,9 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -61,6 +58,5 @@ class ExcerptDAOUnitTests {
 		result.add(hasek);
 		Mockito.when(jdbcTemplate.query(anyString(), ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
 		assertEquals(result, excerptDAO.getAll());
-
 	}
 }

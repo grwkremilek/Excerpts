@@ -11,7 +11,9 @@
 	<div align="right">
 		<a href="/">Home</a>
 	</div>
-	<div align="left">
+	<div th:if="${excerpt == null}">There is no such ID in the
+		database.</div>
+	<div th:unless="${excerpt == null}">
 		<p th:text="'AUTHOR: ' + ${excerpt.author}" />
 		<p th:text="'TITLE: ' + ${excerpt.title}" />
 		<p th:text="'TEXT: ' + ${excerpt.text}" />
