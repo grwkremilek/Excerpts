@@ -9,14 +9,18 @@
 
 <body>
 	<div align="right">
-		<form th:action="@{truncateTables}" method="post">
+		<form th:action="@{truncateTables}">
 			<input type="submit" value="Delete all entries in the db"
 				class="btn btn-danger"
 				th:data-confirm-delete="|Are you sure you want to delete all entries in the database?|"
 				onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false" />
 		</form>
+		<br> <br>
+		<form th:action="@{getAllTags}" method="post">
+			<input type="submit" value="Show all tags in the database" />
+		</form>
 	</div>
-
+	<br>
 	<div align="left">
 		<table>
 			<tr>
@@ -26,52 +30,55 @@
 				<td><a href="createExcerpt">Create a new excerpt</a></td>
 			</tr>
 		</table>
-		<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
-			method="post">
+		<br>
+		<form action="#" th:action="@{/getByParameter}" method="post">
 			<table>
 				<tr>
 					<td>Enter the name of the book</td>
-					<td><input type="text" th:field="*{title}" /></td>
+					<td><input type="text" th:field="${excerpt.title}" /></td>
 					<td><button type="submit" name="parameter" value="title">Submit</button></td>
-					<td th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></td>
 					<td><button type="reset">Reset</button></td>
+					<td th:if="${#fields.hasErrors('excerpt.title')}"
+						th:errors="${excerpt.title}"></td>
 				</tr>
 			</table>
+			<br>
 		</form>
-		<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
-			method="post">
+		<form action="#" th:action="@{/getByParameter}" method="post">
 			<table>
 				<tr>
 					<td>Enter the author's name</td>
-					<td><input type="text" th:field="*{author}" /></td>
+					<td><input type="text" th:field="${excerpt.author}" /></td>
 					<td><button type="submit" name="parameter" value="author">Submit</button></td>
-					<td th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></td>
 					<td><button type="reset">Reset</button></td>
+					<td th:if="${#fields.hasErrors('excerpt.author')}"
+						th:errors="${excerpt.author}"></td>
 				</tr>
 			</table>
+			<br>
 		</form>
-		<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
-			method="post">
+		<form action="#" th:action="@{/getByParameter}" method="post">
 			<table>
 				<tr>
 					<td>Enter a tag</td>
-					<td><input type="text" th:field="*{tags}" /></td>
+					<td><input type="text" th:field="${tag.description}" /></td>
 					<td><button type="submit" name="parameter" value="tag">Submit</button></td>
-					<td th:if="${#fields.hasErrors('tags')}" th:errors="*{tags}"></td>
+					<td th:if="${#fields.hasErrors('tag.description')}"
+						th:errors="${tag.description}"></td>
 					<td><button type="reset">Reset</button></td>
 				</tr>
 			</table>
+			<br>
 		</form>
-		<form action="#" th:action="@{/getByParameter}" th:object="${excerpt}"
-			method="post">
+		<form action="#" th:action="@{/getByParameter}" method="post">
 			<table>
 				<tr>
 					<td>Enter an excerpt ID</td>
-					<td><input type="text" th:field="*{excerptID}" /></td>
+					<td><input type="text" th:field="${excerpt.excerptID}" /></td>
 					<td><button type="submit" name="parameter" value="excerptID">Submit</button></td>
 					<td><button type="reset">Reset</button></td>
-					<td th:if="${#fields.hasErrors('excerptID')}"
-						th:errors="*{excerptID}"></td>
+					<td th:if="${#fields.hasErrors('excerpt.excerptID')}"
+						th:errors="${excerpt.excerptID}"></td>
 				</tr>
 			</table>
 		</form>

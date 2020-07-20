@@ -22,7 +22,7 @@ table th, table td {
 	<div th:unless="${#lists.isEmpty(excerpts)}">
 		<p>
 			<span th:text="${excerpt.title}">title of the book</span>: <span
-				th:text="${counts}">number of excerpts </span> excerpts were found
+				th:text="${count}">number of excerpts </span> excerpts were found
 		</p>
 		<table
 			style="width: 100%; border: 1px solid black; border-collapse: collapse;">
@@ -36,17 +36,18 @@ table th, table td {
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="excerpt : ${excerpts}">
+				<tr th:each="excerpt, iter : ${excerpts}">
 					<td style="border: 1px solid black;" th:text="${excerpt.excerptID}">ExcerptId</td>
 					<td style="border: 1px solid black;" th:text="${excerpt.author}">Author</td>
 					<td style="border: 1px solid black;" th:text="${excerpt.text}">Text</td>
-					<td style="border: 1px solid black;" th:text="${excerpt.tags}">Tags</td>
+					<td style="border: 1px solid black;"
+						th:text="${tags[iter.index].description}">Tags</td>
 					<td style="border: 1px solid black;"><a
 						th:href="@{/displayComments/{comments}(comments=${excerpt.comments})}">Comments</a>
 						<a
-						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{tags}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, tags=${excerpt.tags})}">Edit</a>
+						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{comments}/{description}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, comments=${excerpt.comments}, description=${tags[iter.index].description})}">Edit</a>
 						<a
-						th:href="@{/delete/{excerptID}/{author}/{title}(excerptID=${excerpt.excerptID}, author='author', title=${excerpt.title})}"
+						th:href="@{/delete/{excerptID}/{author}/{title}/{tag}(excerptID=${excerpt.excerptID}, author='author', title=${excerpt.title}, tag='tag')}"
 						onclick="return confirm('Are you sure you want to delete this excerpt?');">Delete</a></td>
 				</tr>
 			</tbody>

@@ -12,36 +12,43 @@
 	</div>
 
 	<div align="center">
-		<h1 th:text="'Edit Excerpt no. ' + ${excerptID}" /></h1>
+		<h1 th:text="'Edit Excerpt no. ' + ${excerpt.excerptID}" /></h1>
 		<br />
-		<form action="#" th:action="@{/save}" th:object="${excerpt}"
-			method="post">
-			<input type="hidden" th:field="*{excerptID}" />
+		<form action="#" th:action="@{/save}" method="post">
+			<input type="hidden" th:field="${excerpt.excerptID}" />
 			<table style="width: 100%;">
 				<tr>
 					<td>Author:</td>
-					<td><input type="text" th:field="*{author}"
-						th:placeholder="${author}" /></td>
-					<td th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></td>
+					<td><input type="text" th:field="${excerpt.author}" /></td>
+					<td th:if="${#fields.hasErrors('excerpt.author')}"
+						th:errors="${excerpt.author}"></td>
 				</tr>
 				<tr>
 					<td>Title:</td>
-					<td><input type="text" th:field="*{title}"
-						th:placeholder="${title}" /></td>
-					<td th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></td>
+					<td><input type="text" th:field="${excerpt.title}" /></td>
+					<td th:if="${#fields.hasErrors('excerpt.title')}"
+						th:errors="${excerpt.title}"></td>
 				</tr>
 				<tr>
 					<td>Text:</td>
-					<td><textarea rows="10" cols="40" th:field="*{text}"
-							th:placeholder="${text}" /></textarea></td>
-					<td th:if="${#fields.hasErrors('text')}" th:errors="*{text}"></td>
+					<td><textarea rows="10" cols="40" th:field="${excerpt.text}" /></textarea></td>
+					<td th:if="${#fields.hasErrors('excerpt.text')}"
+						th:errors="${excerpt.text}"></td>
 
 				</tr>
 				<tr>
 					<td>Tags</td>
-					<td><input type="text" th:field="*{tags}"
-						th:placeholder="${tags}" /></td>
-					<td th:if="${#fields.hasErrors('tags')}" th:errors="*{tags}"></td>
+					<td><input type="text" th:field="${tag.description}" /></td>
+					<td th:if="${#fields.hasErrors('tag.description')}"
+						th:errors="${tag.description}"></td>
+				</tr>
+				<tr>
+					<td>Comments:</td>
+					<td><textarea rows="20" cols="70"
+							th:field="${excerpt.comments}" /></textarea></td>
+					<td th:if="${#fields.hasErrors('excerpt.comments')}"
+						th:errors="${excerpt.comments}"></td>
+
 				</tr>
 				<tr>
 					<td colspan="2"><button type="submit">Save</button></td>

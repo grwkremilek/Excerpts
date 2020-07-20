@@ -1,4 +1,4 @@
-package com.excerpts.springboot;
+package com.excerpts.springboot.validators;
 
 import java.nio.charset.StandardCharsets;
 
@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+
+import com.excerpts.springboot.domain.Excerpt;
 
 @Component
 public class ExcerptValidator implements Validator {
@@ -21,7 +23,8 @@ public class ExcerptValidator implements Validator {
 
 		if (excerpt.getExcerptID() == 0) {
 			if (excerpt.getAuthor() == null && excerpt.getTitle() == null && excerpt.getText() == null
-					&& excerpt.getTags() == null && excerpt.getComments() == null) {
+			/* && excerpt.getTags() == null && excerpt.getComments() == null) { */
+					&& excerpt.getComments() == null) {
 				errors.rejectValue("excerptID", "field.min.value", "Please entrer a valid ID.");
 			}
 		}
@@ -58,15 +61,6 @@ public class ExcerptValidator implements Validator {
 			int textInBytes = bytesText.length;
 			if (textInBytes > 1000) {
 				errors.rejectValue("text", "field.max.length", "The text is too long.");
-			}
-		}
-
-		if (excerpt.getTags() != null) {
-
-			byte[] bytesTags = excerpt.getTags().getBytes(StandardCharsets.UTF_8);
-			int tagsInBytes = bytesTags.length;
-			if (tagsInBytes > 45) {
-				errors.rejectValue("tags", "field.max.length", "There are too many tags.");
 			}
 		}
 

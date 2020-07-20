@@ -20,7 +20,7 @@ table th, table td {
 	<div th:if="${#lists.isEmpty(excerpts)}">The database is empty.</div>
 	<div th:unless="${#lists.isEmpty(excerpts)}">
 		<p>
-			<span th:text="${counts}">number of excerpts </span> excerpts were
+			<span th:text="${count}">number of excerpts </span> excerpts were
 			found
 		</p>
 		<table
@@ -35,12 +35,12 @@ table th, table td {
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="excerpt : ${excerpts}">
+				<tr th:each="excerpt, iter : ${excerpts}">
 					<td style="border: 1px solid black;" th:text="${excerpt.excerptID}">ExcerptID</td>
 					<td style="border: 1px solid black;" th:text="${excerpt.author}">Author</td>
 					<td style="border: 1px solid black;" th:text="${excerpt.title}">Title</td>
 					<td style="border: 1px solid black;" th:text="${excerpt.text}">Text</td>
-					<td style="border: 1px solid black;" th:text="${excerpt.tags}">Tags</td>
+					<td style="border: 1px solid black;" th:text="${tags[iter.index].description}">Tags</td>
 				</tr>
 			</tbody>
 		</table>
