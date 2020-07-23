@@ -69,11 +69,6 @@ class ExcerptDAOUnitTests {
 		}).when(jdbcTemplate).update(anyString(), anyString(), anyString(), anyString(), anyString());
 	}
 
-	@Test
-	public void testEdit() throws Exception {
-
-	}
-
 	/*
 	 * @Test public void testDelete() throws Exception { excerptDAO.delete(3);
 	 * Excerpt nullExcerptDAO = excerptDAO.getByID(3); assertNull(nullExcerptDAO); }
@@ -87,18 +82,6 @@ class ExcerptDAOUnitTests {
 		result.add(hasek);
 		Mockito.when(jdbcTemplate.query(anyString(), ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
 		assertEquals(result, excerptDAO.getAll());
-	}
-	
-	@Test
-	public void testGetByAuthor() throws Exception {
-		List<Excerpt> result = new ArrayList<>();
-		result.add(wilde1);
-		result.add(wilde2);
-
-		ReflectionTestUtils.setField(excerptDAO, "jdbcTemplate", jdbcTemplate);
-		Mockito.when(jdbcTemplate.query(anyString(), ArgumentMatchers.<Object[]>any(),
-				ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
-		assertEquals(result, excerptDAO.getByAuthor("Oscar Wilde"));
 	}
 
 	@Test
@@ -115,6 +98,18 @@ class ExcerptDAOUnitTests {
 	}
 
 	@Test
+	public void testGetByAuthor() throws Exception {
+		List<Excerpt> result = new ArrayList<>();
+		result.add(wilde1);
+		result.add(wilde2);
+
+		ReflectionTestUtils.setField(excerptDAO, "jdbcTemplate", jdbcTemplate);
+		Mockito.when(jdbcTemplate.query(anyString(), ArgumentMatchers.<Object[]>any(),
+				ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
+		assertEquals(result, excerptDAO.getByAuthor("Oscar Wilde"));
+	}
+
+	@Test
 	public void testGetByTag() throws Exception {
 		List<Excerpt> result = new ArrayList<>();
 		result.add(pinter1);
@@ -126,7 +121,7 @@ class ExcerptDAOUnitTests {
 				ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
 		assertEquals(result, excerptDAO.getByTag("past"));
 	}
-	
+
 	@Test
 	public void testgetByID() throws Exception {
 
@@ -136,5 +131,10 @@ class ExcerptDAOUnitTests {
 	void testCountAll() throws Exception {
 		Mockito.when(jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Excerpt", Integer.class)).thenReturn(4);
 		assertEquals(4, excerptDAO.countAll());
+	}
+
+	@Test
+	void testDelete() {
+
 	}
 }

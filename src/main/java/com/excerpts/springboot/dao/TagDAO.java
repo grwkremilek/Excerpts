@@ -170,7 +170,7 @@ public class TagDAO implements DAO<Tag> {
 	}
 
 	/**
-	 * Method deleting all entries in all the tables and restarting auto-increment
+	 * Method deleting all entries in the tables Tag and Tagmap and restarting auto-increment
 	 */
 	public void resetTables() {
 

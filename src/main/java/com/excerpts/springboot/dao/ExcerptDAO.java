@@ -145,7 +145,7 @@ public class ExcerptDAO implements DAO<Excerpt> {
 	}
 
 	/**
-	 * Method deleting all entries in all the tables and restarting auto-increment
+	 * Method deleting all entries in the table Excerpt and restarting auto-increment
 	 */
 	@Override
 	public void resetTables() {
