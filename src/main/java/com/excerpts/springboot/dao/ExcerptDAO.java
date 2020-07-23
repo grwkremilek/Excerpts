@@ -28,29 +28,23 @@ public class ExcerptDAO implements DAO<Excerpt> {
 
 	@Transactional
 	@Override
-	public int save(int excerptID, String... params) {
+	public void save(int excerptID, String... params) {
 
 		String author = params[0].trim();
 		String title = params[1].trim();
 		String text = params[2].trim();
 		String comments = params[3].trim();
 
-		int currentExcerptID;
-
 		if (excerptID == 0) {
 
 			String insertExcerptSQL = "INSERT INTO Excerpt (author, title, text, comments) values (?, ?, ?, ?)";
 			jdbcTemplate.update(insertExcerptSQL, author, title, text, comments);
-			currentExcerptID = jdbcTemplate.queryForObject("SELECT MAX(excerptID) FROM excerpt", Integer.class);
 
 		} else {
 
-			String excerptSQL = "UPDATE Excerpt SET author = ?, title = ?, text = ? WHERE excerptID=?";
-			jdbcTemplate.update(excerptSQL, author, title, text, excerptID);
-			currentExcerptID = excerptID;
+			String updateExcerptSQL = "UPDATE Excerpt SET author = ?, title = ?, text = ? WHERE excerptID=?";
+			jdbcTemplate.update(updateExcerptSQL, author, title, text, excerptID);
 		}
-
-		return currentExcerptID;
 	}
 
 	/**
@@ -144,15 +138,10 @@ public class ExcerptDAO implements DAO<Excerpt> {
 	 * @param excerptID
 	 */
 	@Override
-	public int delete(int excerptID) {
-
-		String getTagIDSQL = "SELECT tagID FROM TagMap WHERE excerptID = ?";
-		int tagID = jdbcTemplate.queryForObject(getTagIDSQL, new Integer[] { excerptID }, Integer.class);
+	public void delete(int excerptID) {
 
 		String excerptSQL = "DELETE FROM Excerpt WHERE excerptID = ?";
 		jdbcTemplate.update(excerptSQL, excerptID);
-
-		return tagID;
 	}
 
 	/**

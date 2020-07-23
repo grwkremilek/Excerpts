@@ -1,6 +1,8 @@
 package com.excerpts.springboot;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +35,6 @@ public class ExcerptController {
 	TagValidator tagValidator;
 
 	/**
-	 * display the home page
 	 * 
 	 * @param model
 	 * @return
@@ -46,7 +47,6 @@ public class ExcerptController {
 	}
 
 	/**
-	 * display a new excerpt form
 	 * 
 	 * @param model
 	 * @return
@@ -59,7 +59,6 @@ public class ExcerptController {
 	}
 
 	/**
-	 * save a new or edited excerpt
 	 * 
 	 * @param excerptID
 	 * @param excerpt
@@ -75,7 +74,7 @@ public class ExcerptController {
 			BindingResult tagResult, Model model) {
 
 		excerptValidator.validate(excerpt, excerptResult);
-		tagValidator.validate(excerpt, tagResult);
+		tagValidator.validate(tag, tagResult);
 
 		if (excerptResult.hasErrors() || tagResult.hasErrors()) {
 			return "newExcerptForm";
@@ -87,8 +86,8 @@ public class ExcerptController {
 		String comments = excerpt.getComments();
 		String description = tag.getDescription();
 
-		int createdExcerptID = exerptDAO.save(excerptID, author, title, text, comments);
-		tagDAO.save(createdExcerptID, description);
+		exerptDAO.save(excerptID, author, title, text, comments);
+		tagDAO.save(excerptID, description);
 
 		model.addAttribute("author", author);
 		model.addAttribute("title", title);
@@ -99,7 +98,6 @@ public class ExcerptController {
 	}
 
 	/**
-	 * display all excerpts (with their tags)
 	 * 
 	 * @param model
 	 * @return
@@ -109,28 +107,31 @@ public class ExcerptController {
 
 		List<Excerpt> excerpts = exerptDAO.getAll();
 		List<Tag> tags = tagDAO.getAll();
-
 		int count = excerpts.size();
+
+		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
+				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
+
 		model.addAttribute("excerpts", excerpts);
-		model.addAttribute("tags", tags);
+		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
 		return "getAll";
 	}
 
 	/**
-	 * display excerpts from a book with title
 	 * 
 	 * @param title
+	 * @param tag
 	 * @param excerpt
 	 * @param result
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/getByParameter", method = { RequestMethod.GET,
-			RequestMethod.POST }, params = "parameter=title")
-	public String processTitle(@RequestParam(name = "title") String title, @ModelAttribute("excerpt") Excerpt excerpt,
-			BindingResult result, Model model) {
+	@RequestMapping(value = "/getByParameter", method = { RequestMethod.POST,
+			RequestMethod.GET }, params = "parameter=title")
+	public String processTitle(@RequestParam(name = "title") String title, @ModelAttribute("tag") Tag tag,
+			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
 
 		excerptValidator.validate(excerpt, result);
 
@@ -142,24 +143,27 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getByTitle(title);
 		int count = excerpts.size();
 
+		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
+				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
+
 		model.addAttribute("excerpts", excerpts);
-		model.addAttribute("tags", tags);
+		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 		return "getByTitle";
 	}
 
 	/**
-	 * display excerpts by an author
 	 * 
 	 * @param author
+	 * @param tag
 	 * @param excerpt
 	 * @param result
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/getByParameter", method = { RequestMethod.GET,
-			RequestMethod.POST }, params = "parameter=author")
-	public String processAuthor(@RequestParam(name = "author") String author,
+	@RequestMapping(value = "/getByParameter", method = { RequestMethod.POST,
+			RequestMethod.GET }, params = "parameter=author")
+	public String processAuthor(@RequestParam(name = "author") String author, @ModelAttribute("tag") Tag tag,
 			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
 
 		excerptValidator.validate(excerpt, result);
@@ -172,25 +176,29 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getByAuthor(author);
 		int count = excerpts.size();
 
+		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
+				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
+
 		model.addAttribute("excerpts", excerpts);
-		model.addAttribute("tags", tags);
+		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 		return "getByAuthor";
 	}
 
 	/**
-	 * display excerpts with a tag
 	 * 
 	 * @param description
+	 * @param excerpt
 	 * @param tag
 	 * @param result
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/getByParameter", method = { RequestMethod.GET,
-			RequestMethod.POST }, params = "parameter=tag")
-	public String processTag(@RequestParam(name = "description") String description, @ModelAttribute("tag") Tag tag,
-			BindingResult result, Model model) {
+	@RequestMapping(value = "/getByParameter", method = { RequestMethod.POST,
+			RequestMethod.GET }, params = "parameter=tag")
+	public String processTag(@RequestParam(name = "description") String description,
+			@ModelAttribute("excerpt") Excerpt excerpt, @ModelAttribute("tag") Tag tag, BindingResult result,
+			Model model) {
 
 		tagValidator.validate(tag, result);
 
@@ -202,24 +210,27 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getByTag(description);
 		int count = excerpts.size();
 
+		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
+				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
+
 		model.addAttribute("excerpts", excerpts);
-		model.addAttribute("tags", tags);
+		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 		return "getByTag";
 	}
 
 	/**
-	 * get an excerpt by its excerptID
 	 * 
 	 * @param excerptID
+	 * @param tag
 	 * @param excerpt
 	 * @param result
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/getByParameter", method = { RequestMethod.GET,
-			RequestMethod.POST }, params = "parameter=excerptID")
-	public String processExcerptID(@RequestParam(name = "excerptID") Integer excerptID,
+	@RequestMapping(value = "/getByParameter", method = { RequestMethod.POST,
+			RequestMethod.GET }, params = "parameter=excerptID")
+	public String processExcerptID(@RequestParam(name = "excerptID") Integer excerptID, @ModelAttribute("tag") Tag tag,
 			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
 
 		excerptValidator.validate(excerpt, result);
@@ -231,13 +242,15 @@ public class ExcerptController {
 		List<Excerpt> excerpts = exerptDAO.getByID(excerptID);
 		List<Tag> tags = tagDAO.getByID(excerptID);
 
+		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
+				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
+
 		model.addAttribute("excerpts", excerpts);
-		model.addAttribute("tags", tags);
+		model.addAttribute("descriptions", descriptions);
 		return "getByExcerptID";
 	}
 
 	/**
-	 * display comments on a separate page
 	 * 
 	 * @param comments
 	 * @param model
@@ -251,12 +264,12 @@ public class ExcerptController {
 	}
 
 	/**
-	 * delete an excerpt
 	 * 
 	 * @param redirectAttributes
 	 * @param excerptID
 	 * @param author
 	 * @param title
+	 * @param tag
 	 * @param model
 	 * @return
 	 */
@@ -265,8 +278,8 @@ public class ExcerptController {
 			@PathVariable("author") String author, @PathVariable("title") String title, @PathVariable("tag") String tag,
 			Model model) {
 
-		int tagID = exerptDAO.delete(excerptID);
-		tagDAO.delete(tagID);
+		exerptDAO.delete(excerptID);
+		tagDAO.delete(excerptID);
 
 		if (!author.equals("author") && title.equals("title") && tag.equals("tag")) {
 			redirectAttributes.addAttribute("author", author);
@@ -286,14 +299,9 @@ public class ExcerptController {
 	}
 
 	/**
-	 * display edit form
 	 * 
-	 * @param excerptID
-	 * @param author
-	 * @param title
-	 * @param text
-	 * @param comments
-	 * @param tags
+	 * @param excerpt
+	 * @param tag
 	 * @param model
 	 * @return
 	 */
@@ -306,7 +314,6 @@ public class ExcerptController {
 	}
 
 	/**
-	 * delete all entries in the tables in the database and reset auto-increment
 	 * 
 	 * @return
 	 */
@@ -319,14 +326,13 @@ public class ExcerptController {
 	}
 
 	/**
-	 * show all tags
 	 * 
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/getAllTags", method = RequestMethod.POST)
 	public String getAllTags(Model model) {
-		
+
 		List<Tag> tags = tagDAO.getAll();
 		int count = tagDAO.countAll();
 		model.addAttribute("tags", tags);

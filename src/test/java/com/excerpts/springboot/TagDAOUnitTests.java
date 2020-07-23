@@ -35,16 +35,6 @@ class TagDAOUnitTests {
 	}
 
 	@Test
-	public void testEdit() throws Exception {
-
-	}
-
-	@Test
-	public void testDelete() throws Exception {
-
-	}
-
-	@Test
 	void testgetAll() throws Exception {
 
 	}
@@ -66,6 +56,11 @@ class TagDAOUnitTests {
 
 	@Test
 	public void testgetByID() throws Exception {
+
+	}
+	
+	@Test
+	public void testDelete() throws Exception {
 
 	}
 

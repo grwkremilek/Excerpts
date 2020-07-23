@@ -23,7 +23,6 @@ public class ExcerptValidator implements Validator {
 
 		if (excerpt.getExcerptID() == 0) {
 			if (excerpt.getAuthor() == null && excerpt.getTitle() == null && excerpt.getText() == null
-			/* && excerpt.getTags() == null && excerpt.getComments() == null) { */
 					&& excerpt.getComments() == null) {
 				errors.rejectValue("excerptID", "field.min.value", "Please entrer a valid ID.");
 			}

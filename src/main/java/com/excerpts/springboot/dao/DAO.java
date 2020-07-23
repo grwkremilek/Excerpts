@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface DAO<T> {
 
-	public int save(int id, String... params);
+	public void save(int id, String... params);
 
 	public List<T> getAll();
 
@@ -23,7 +23,7 @@ public interface DAO<T> {
 
 	public int countAll();
 
-	public int delete(int id);
+	public void delete(int id);
 
 	/**
 	 * Method deleting all entries in the database tables and restarting
