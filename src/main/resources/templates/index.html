@@ -4,15 +4,6 @@
 
 <head>
 <style>
-a:link, a:visited {
-	background-color: #7986b5;
-	color: white;
-	padding: 4px 32px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-}
-
 table.table1 {
 	table-layout: fixed;
 	width: 300px;
@@ -33,21 +24,30 @@ th.table2, td.table2 {
 	overflow: hidden;
 }
 
+a:link, a:visited {
+	background-color: #7986b5;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	width: 60%;
+}
+
 button {
 	background-color: #7986b5;
 	border: none;
 	color: white;
-	padding: 4px 32px;
 	text-align: center;
 	font-size: 14px;
+	width: 60%;
 }
 
 input[type=submit] {
 	background-color: #7986b5;
 	border: none;
 	color: white;
-	padding: 6px 32px;
 	cursor: pointer;
+	width: 60%;
 }
 </style>
 
@@ -72,14 +72,16 @@ input[type=submit] {
 		<form th:action="@{getAllTags}" method="post" id="tags"></form>
 		<table class="table2">
 			<tr>
-				<td><a href="/getAll">display all excerpts in the database</a></td>
+				<td><a href="/getAll">display all excerpts in
+						the database</a></td>
 			</tr>
 			<tr>
-				<td><a href="createExcerpt">create a new excerpt</a></td>
+				<td><a href="createExcerpt">create a new
+						excerpt</a></td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="Show all tags in the database"
-					form="tags" /></td>
+				<td><input type="submit"
+					value="show all tags in the database" form="tags" /></td>
 			</tr>
 		</table>
 		<br>

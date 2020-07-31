@@ -17,6 +17,11 @@ button {
 	text-align: center;
 	font-size: 14px;
 }
+
+.validation-author, .validation-text, .validation-title, .validation-tag,
+	.validation-comments {
+	color: #d1cb1d;
+}
 </style>
 
 <meta charset="utf-8" />
@@ -37,26 +42,31 @@ button {
 				<tr>
 					<td>author</td>
 					<td><input type="text" th:field="${excerpt.author}" /></td>
-					<td th:if="${#fields.hasErrors('excerpt.author')}"
+					<td class="validation-author"
+						th:if="${#fields.hasErrors('excerpt.author')}"
 						th:errors="${excerpt.author}"></td>
 
-					<td rowspan="3">text</td>
+					<td>text</td>
 					<td rowspan="3"><textarea rows="10" cols="90"
 							th:field="${excerpt.text}" /></textarea></td>
-					<td rowspan="3" th:if="${#fields.hasErrors('excerpt.text')}"
+					<td rowspan="3" class="validation-text"
+						th:if="${#fields.hasErrors('excerpt.text')}"
 						th:errors="${excerpt.text}"></td>
+
 				</tr>
 				<tr>
 					<td>title</td>
 					<td><input type="text" th:field="${excerpt.title}" /></td>
-					<td th:if="${#fields.hasErrors('excerpt.title')}"
+					<td class="validation-title"
+						th:if="${#fields.hasErrors('excerpt.title')}"
 						th:errors="${excerpt.title}"></td>
 				</tr>
 
 				<tr>
 					<td>tags</td>
 					<td><input type="text" th:field="${tag.description}" /></td>
-					<td th:if="${#fields.hasErrors('tag.description')}"
+					<td class="validation-tag"
+						th:if="${#fields.hasErrors('tag.description')}"
 						th:errors="${tag.description}" /></td>
 				</tr>
 				<tr>
@@ -65,7 +75,8 @@ button {
 				<tr>
 					<td colspan="8"><textarea rows="15" cols="150"
 							th:field="${excerpt.comments}" /></textarea></td>
-					<td colspan="5" th:if="${#fields.hasErrors('excerpt.comments')}"
+					<td class="validation-comments" colspan="5"
+						th:if="${#fields.hasErrors('excerpt.comments')}"
 						th:errors="${excerpt.comments}"></td>
 
 				</tr>
