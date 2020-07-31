@@ -4,6 +4,27 @@
 <head>
 <meta charset="utf-8" />
 <title>Edit Excerpt</title>
+
+<style>
+input[type=text] {
+	width: 90%;
+	box-sizing: border-box;
+}
+
+button {
+	background-color: #7986b5;
+	border: none;
+	color: white;
+	padding: 4px 32px;
+	text-align: center;
+	font-size: 14px;
+}
+
+.validation-author, .validation-text, .validation-title, .validation-tag,
+	.validation-comments {
+	color: #d1cb1d;
+}
+</style>
 </head>
 
 <body>
@@ -16,42 +37,51 @@
 		<br />
 		<form action="#" th:action="@{/save}" method="post">
 			<input type="hidden" th:field="${excerpt.excerptID}" />
+
 			<table style="width: 100%;">
 				<tr>
-					<td>Author:</td>
+					<td>author</td>
 					<td><input type="text" th:field="${excerpt.author}" /></td>
-					<td th:if="${#fields.hasErrors('excerpt.author')}"
+					<td class="validation-author"
+						th:if="${#fields.hasErrors('excerpt.author')}"
 						th:errors="${excerpt.author}"></td>
-				</tr>
-				<tr>
-					<td>Title:</td>
-					<td><input type="text" th:field="${excerpt.title}" /></td>
-					<td th:if="${#fields.hasErrors('excerpt.title')}"
-						th:errors="${excerpt.title}"></td>
-				</tr>
-				<tr>
-					<td>Text:</td>
-					<td><textarea rows="10" cols="40" th:field="${excerpt.text}" /></textarea></td>
-					<td th:if="${#fields.hasErrors('excerpt.text')}"
+
+					<td>text</td>
+					<td rowspan="3"><textarea rows="10" cols="90"
+							th:field="${excerpt.text}" /></textarea></td>
+					<td rowspan="3" class="validation-text"
+						th:if="${#fields.hasErrors('excerpt.text')}"
 						th:errors="${excerpt.text}"></td>
 
 				</tr>
 				<tr>
-					<td>Tags</td>
+					<td>title</td>
+					<td><input type="text" th:field="${excerpt.title}" /></td>
+					<td class="validation-title"
+						th:if="${#fields.hasErrors('excerpt.title')}"
+						th:errors="${excerpt.title}"></td>
+				</tr>
+
+				<tr>
+					<td>tags</td>
 					<td><input type="text" th:field="${tag.description}" /></td>
-					<td th:if="${#fields.hasErrors('tag.description')}"
-						th:errors="${tag.description}"></td>
+					<td class="validation-tag"
+						th:if="${#fields.hasErrors('tag.description')}"
+						th:errors="${tag.description}" /></td>
 				</tr>
 				<tr>
-					<td>Comments:</td>
-					<td><textarea rows="20" cols="70"
+					<td>comments</td>
+				</tr>
+				<tr>
+					<td colspan="8"><textarea rows="15" cols="150"
 							th:field="${excerpt.comments}" /></textarea></td>
-					<td th:if="${#fields.hasErrors('excerpt.comments')}"
+					<td class="validation-comments" colspan="5"
+						th:if="${#fields.hasErrors('excerpt.comments')}"
 						th:errors="${excerpt.comments}"></td>
 
 				</tr>
 				<tr>
-					<td colspan="2"><button type="submit">Save</button></td>
+					<td><button type="submit">save</button></td>
 				</tr>
 			</table>
 		</form>
