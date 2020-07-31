@@ -3,24 +3,41 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
+
 <meta charset="utf-8" />
 <title>Excerpt added to the database</title>
 </head>
 
 <body>
-	<div align="left">
-		<h1>Excerpt added to the database</h1>
-		<p th:text="'AUTHOR: ' + ${excerpt.author}" />
-		<p th:text="'TITLE: ' + ${excerpt.title}" />
-		<p th:text="'TEXT: ' + ${excerpt.text}" />
-		<p th:text="'TAGS: ' + ${tag.description}" />
-		<p th:text="'COMMENTS: ' + ${excerpt.comments}" />
+	<div align="right">
+		<a href="/">Home</a>
 	</div>
-	<div align="left">
+	<div align="right">
 		<a href="createExcerpt">Create another excerpt</a> <br /> <br />
 	</div>
 	<div align="left">
-		<a href="/">Home</a>
+		<h2>information added to the database</h2>
+		<table style="width: 40%;">
+			<tr>
+				<td>author</td>
+				<td th:text="${excerpt.author}" /></td>
+			</tr>
+			<tr>
+				<td>title</td>
+				<td th:text="${excerpt.title}" /></td>
+			</tr>
+			<tr>
+				<td>tags</td>
+				<td th:text="${tag.description}" /></td>
+			</tr>
+			<tr>
+				<td>text</td>
+				<td th:text="${excerpt.text}" /></td>
+			</tr>
+			<tr>
+				<td>comments</td>
+				<td th:text="${excerpt.comments}" /></td>
+		</table>
 	</div>
 </body>
 </html>
