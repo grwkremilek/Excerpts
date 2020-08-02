@@ -13,5 +13,4 @@ public class ExcerptApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ExcerptApplication.class, args);
 	}
-
 }

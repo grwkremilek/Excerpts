@@ -170,18 +170,17 @@ public class TagDAO implements DAO<Tag> {
 	}
 
 	/**
-	 * Method deleting all entries in the tables Tag and Tagmap and restarting auto-increment
+	 * Method deleting all entries in the tables Tag and Tagmap and restarting
+	 * auto-increment
 	 */
 	public void resetTables() {
 
 		String removeChecksSQL = "SET FOREIGN_KEY_CHECKS = 0";
 		jdbcTemplate.update(removeChecksSQL);
-
 		String tagmapSQL = "TRUNCATE table Tagmap";
 		jdbcTemplate.update(tagmapSQL);
 		String tagSQL = "TRUNCATE table Tag";
 		jdbcTemplate.update(tagSQL);
-
 		String renewChecksSQL = "SET FOREIGN_KEY_CHECKS = 1";
 		jdbcTemplate.update(renewChecksSQL);
 

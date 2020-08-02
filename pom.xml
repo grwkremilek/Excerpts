@@ -16,7 +16,7 @@
 	<description>Excerpt project for Spring Boot</description>
 
 	<properties>
-		<java.version>14</java.version>
+		<java.version>13</java.version>
 	</properties>
 
 	<dependencies>
@@ -48,21 +48,19 @@
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.smattme</groupId>
+			<artifactId>mysql-backup4j</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
 
 		<!-- TESTS -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 	</dependencies>
-
 
 	<build>
 		<plugins>

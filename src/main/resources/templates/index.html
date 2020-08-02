@@ -11,7 +11,7 @@ table.table1 {
 
 th.table1, td.table1 {
 	width: 100px;
-	overflow: hidden;
+	overflow: auto;
 }
 
 table.table2 {
@@ -49,6 +49,11 @@ input[type=submit] {
 	cursor: pointer;
 	width: 60%;
 }
+
+.validation-author, .validation-text, .validation-title, .validation-tag,
+	.validation-id {
+	color: #d1cb1d;
+}
 </style>
 
 <meta charset="utf-8" />
@@ -57,11 +62,11 @@ input[type=submit] {
 
 <body>
 	<div align="right">
-		<form th:action="@{truncateTables}"></form>
+		<form th:action="@{truncateTables}" id="truncate"></form>
 		<table class="table1">
 			<tr>
 				<td><input type="submit" value="delete all entries in the db"
-					class="btn btn-danger"
+					form="truncate" class="btn btn-danger"
 					th:data-confirm-delete="|Are you sure you want to delete all entries in the database?|"
 					onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false" /></td>
 			</tr>
@@ -72,16 +77,14 @@ input[type=submit] {
 		<form th:action="@{getAllTags}" method="post" id="tags"></form>
 		<table class="table2">
 			<tr>
-				<td><a href="/getAll">display all excerpts in
-						the database</a></td>
+				<td><a href="/getAll">display all excerpts in the database</a></td>
 			</tr>
 			<tr>
-				<td><a href="createExcerpt">create a new
-						excerpt</a></td>
+				<td><a href="createExcerpt">create a new excerpt</a></td>
 			</tr>
 			<tr>
-				<td><input type="submit"
-					value="show all tags in the database" form="tags" /></td>
+				<td><input type="submit" value="show all tags in the database"
+					form="tags" /></td>
 			</tr>
 		</table>
 		<br>
@@ -95,11 +98,12 @@ input[type=submit] {
 			<tr>
 				<td>enter the name of the book</td>
 				<td><input type="text" th:field="${excerpt.title}" form="title" /></td>
+				<td class="validation-title"
+					th:if="${#fields.hasErrors('excerpt.title')}"
+					th:errors="${excerpt.title}"></td>
 				<td><button type="submit" name="parameter" value="title"
 						form="title">submit</button></td>
 				<td><button type="reset" form="title">reset</button></td>
-				<td th:if="${#fields.hasErrors('excerpt.title')}"
-					th:errors="${excerpt.title}"></td>
 			</tr>
 			<tr>
 				<td>enter the author's name</td>
@@ -108,7 +112,8 @@ input[type=submit] {
 				<td><button type="submit" name="parameter" value="author"
 						form="author">submit</button></td>
 				<td><button type="reset" form="author">reset</button></td>
-				<td th:if="${#fields.hasErrors('excerpt.author')}"
+				<td class="validation-author"
+					th:if="${#fields.hasErrors('excerpt.author')}"
 					th:errors="${excerpt.author}"></td>
 			</tr>
 			<tr>
@@ -117,7 +122,8 @@ input[type=submit] {
 				<td><button type="submit" name="parameter" value="tag"
 						form="tag">submit</button></td>
 				<td><button type="reset" form="tag">reset</button></td>
-				<td th:if="${#fields.hasErrors('tag.description')}"
+				<td class="validation-tag"
+					th:if="${#fields.hasErrors('tag.description')}"
 					th:errors="${tag.description}"></td>
 			</tr>
 			<tr>
@@ -127,7 +133,8 @@ input[type=submit] {
 				<td><button type="submit" name="parameter" value="excerptID"
 						form="id">submit</button></td>
 				<td><button type="reset" form="id">reset</button></td>
-				<td th:if="${#fields.hasErrors('excerpt.excerptID')}"
+				<td class="validation-id"
+					th:if="${#fields.hasErrors('excerpt.excerptID')}"
 					th:errors="${excerpt.excerptID}"></td>
 			</tr>
 		</table>
