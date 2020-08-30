@@ -29,18 +29,20 @@ public class TagDAO implements DAO<Tag> {
 	@Override
 	public void save(int excerptID, String... params) {
 
-		String[] descriptions = params[0].trim().split(";");
+		String[] descriptions = params[0].trim().split("\\s*;\\s*");;
 
 		if (excerptID == 0) {
 
 			/* fetch the ID of the newly created excerpt */
 			String getExcerptIDSQL = "SELECT LAST_INSERT_ID()";
 			excerptID = jdbcTemplate.queryForObject(getExcerptIDSQL, Integer.class);
+
 		} else {
 
-			/* delete residual mappings of edited excerpt */
+			/* delete residual mappings of the edited excerpt */
 			String deleteMappingsSQL = "DELETE FROM tagmap WHERE excerptID = ?";
 			jdbcTemplate.update(deleteMappingsSQL, excerptID);
+			System.out.println("mappings deleted");
 		}
 
 		for (String description : descriptions) {

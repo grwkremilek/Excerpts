@@ -2,6 +2,8 @@ package com.excerpts.springboot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -333,8 +335,11 @@ public class ExcerptController {
 	@RequestMapping(value = "/getAllTags", method = RequestMethod.POST)
 	public String getAllTags(Model model) {
 
-		List<Tag> tags = tagDAO.getAll();
+		List<Tag> rawTags = tagDAO.getAll();
 		int count = tagDAO.countAll();
+
+		Set<String> tags = rawTags.stream().map(Tag::getDescription)
+				.collect(Collectors.toCollection(() -> new TreeSet<>(String.CASE_INSENSITIVE_ORDER)));
 		model.addAttribute("tags", tags);
 		model.addAttribute("count", count);
 		return "tags";

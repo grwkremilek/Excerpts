@@ -29,11 +29,11 @@
 					<td style="border: 1px solid black;" th:text="${excerpt.text}">Text</td>
 					<td style="border: 1px solid black;" th:text="${descriptions[iter.index]}">Tags</td>
 					<td style="border: 1px solid black;"><a
-						th:href="@{/displayComments/{comments}(comments=${excerpt.comments})}">Comments</a>
+						th:href="@{/displayComments/{comments}/details(comments=${excerpt.comments})}">Comments</a>
 						<a
-						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{comments}/{description}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, comments=${excerpt.comments}, description=${descriptions[iter.index]})}">Edit</a>
+						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{comments}/{description}/details(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, comments=${excerpt.comments}, description=${descriptions[iter.index]})}">Edit</a>
 						<a
-						th:href="@{/delete/{excerptID}/{author}/{title}/{tag}(excerptID=${excerpt.excerptID}, author='author', title='title', tag='tag')}"
+						th:href="@{/delete/{excerptID}/{author}/{title}/{tag}/details(excerptID=${excerpt.excerptID}, author='author', title='title', tag='tag')}"
 						onclick="return confirm('Are you sure you want to delete this excerpt?');">Delete</a></td>
 				</tr>
 			</tbody>
