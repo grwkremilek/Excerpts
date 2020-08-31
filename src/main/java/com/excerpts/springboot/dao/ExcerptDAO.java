@@ -85,7 +85,7 @@ public class ExcerptDAO implements DAO<Excerpt> {
 	public List<Excerpt> getByAuthor(String... params) {
 		String author = params[0];
 		String SQL = "SELECT * FROM Excerpt WHERE author = ? ORDER BY title";
-		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { author }, new ExcerptMapper());
+		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { author }, new ExcerptMapper());	
 		return excerpts;
 	}
 

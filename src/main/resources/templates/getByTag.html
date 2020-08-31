@@ -45,7 +45,7 @@ table th, table td {
 					<td style="border: 1px solid black;"
 						th:text="${descriptions[iter.index]}">Tags</td>
 					<td style="border: 1px solid black;"><a
-						th:href="@{/displayComments/{comments}/details(comments=${excerpt.comments})}">Comments</a>
+						th:href="@{/displayComments/{comments}(comments=${excerpt.comments})}">Comments</a>
 						<a
 						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/details{comments}/{description}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, comments=${excerpt.comments}, description=${descriptions[iter.index]})}">Edit</a>
 						<a
