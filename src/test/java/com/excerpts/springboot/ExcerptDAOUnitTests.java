@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -51,90 +53,93 @@ class ExcerptDAOUnitTests {
 	private ExcerptDAO excerptDAO = new ExcerptDAO();
 
 	@Mock
-	private JdbcTemplate jdbcTemplate;
+	private JdbcTemplate mockJdbcTemplate;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		ReflectionTestUtils.setField(excerptDAO, "jdbcTemplate", jdbcTemplate);
+		ReflectionTestUtils.setField(excerptDAO, "jdbcTemplate", mockJdbcTemplate);
 	}
 
 	@Test
-	public void testSave() throws Exception {
+	public void shouldSaveExcerpt() throws Exception {
 		Mockito.doAnswer(new Answer<Excerpt>() {
 			public Excerpt answer(InvocationOnMock invocation) {
 				Object[] args = invocation.getArguments();
 				return (Excerpt) args[0];
 			}
-		}).when(jdbcTemplate).update(anyString(), anyString(), anyString(), anyString(), anyString());
+		}).when(mockJdbcTemplate).update(anyString(), anyString(), anyString(), anyString(), anyString());
 	}
 
-	/*
-	 * @Test public void testDelete() throws Exception { excerptDAO.delete(3);
-	 * Excerpt nullExcerptDAO = excerptDAO.getByID(3); assertNull(nullExcerptDAO); }
-	 */
-
 	@Test
-	void testgetAll() throws Exception {
+	void shouldGetAllExcerpts() throws Exception {
 		List<Excerpt> result = new ArrayList<>();
 		result.add(faulkner);
 		result.add(wilde1);
 		result.add(hasek);
-		Mockito.when(jdbcTemplate.query(anyString(), ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
+
+		Mockito.when(mockJdbcTemplate.query(anyString(), ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
 		assertEquals(result, excerptDAO.getAll());
 	}
 
 	@Test
-	public void testGetByTitle() throws Exception {
+	public void shouldGetExcerptsByTitle() throws Exception {
 		List<Excerpt> result = new ArrayList<>();
 		result.add(pinter1);
 		result.add(bradbury);
 		result.add(pinter2);
 
-		ReflectionTestUtils.setField(excerptDAO, "jdbcTemplate", jdbcTemplate);
-		Mockito.when(jdbcTemplate.query(anyString(), ArgumentMatchers.<Object[]>any(),
+		Mockito.when(mockJdbcTemplate.query(anyString(), ArgumentMatchers.<Object[]>any(),
 				ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
 		assertEquals(result, excerptDAO.getByTitle("The Homecoming"));
 	}
 
 	@Test
-	public void testGetByAuthor() throws Exception {
+	public void shouldGetExcerptsByAuthor() throws Exception {
 		List<Excerpt> result = new ArrayList<>();
 		result.add(wilde1);
 		result.add(wilde2);
 
-		ReflectionTestUtils.setField(excerptDAO, "jdbcTemplate", jdbcTemplate);
-		Mockito.when(jdbcTemplate.query(anyString(), ArgumentMatchers.<Object[]>any(),
+		Mockito.when(mockJdbcTemplate.query(anyString(), ArgumentMatchers.<Object[]>any(),
 				ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
 		assertEquals(result, excerptDAO.getByAuthor("Oscar Wilde"));
 	}
 
 	@Test
-	public void testGetByTag() throws Exception {
+	public void shouldGetExcerptsByTag() throws Exception {
 		List<Excerpt> result = new ArrayList<>();
 		result.add(pinter1);
 		result.add(faulkner);
 		result.add(pinter2);
 
-		ReflectionTestUtils.setField(excerptDAO, "jdbcTemplate", jdbcTemplate);
-		Mockito.when(jdbcTemplate.query(anyString(), ArgumentMatchers.<Object[]>any(),
+		Mockito.when(mockJdbcTemplate.query(anyString(), ArgumentMatchers.<Object[]>any(),
 				ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
 		assertEquals(result, excerptDAO.getByTag("past"));
 	}
 
 	@Test
-	public void testgetByID() throws Exception {
+	public void shouldGetExcerptByID() throws Exception {
+		List<Excerpt> result = new ArrayList<>();
+		result.add(faulkner);
+
+		Mockito.when(mockJdbcTemplate.query(anyString(), ArgumentMatchers.<Object[]>any(),
+				ArgumentMatchers.any(ExcerptMapper.class))).thenReturn(result);
+		assertEquals(result, excerptDAO.getByID(1));
 
 	}
 
 	@Test
-	void testCountAll() throws Exception {
-		Mockito.when(jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Excerpt", Integer.class)).thenReturn(4);
+	void shouldCountAllExcerpt() throws Exception {
+		Mockito.when(mockJdbcTemplate.queryForObject("SELECT COUNT(*) FROM Excerpt", Integer.class)).thenReturn(4);
 		assertEquals(4, excerptDAO.countAll());
 	}
 
 	@Test
-	void testDelete() {
+	void shouldDeleteExcerpt() {
+
+		excerptDAO.delete(1);
+		verify(mockJdbcTemplate, times(1)).update(anyString(), eq(1));
 
 	}
+
 }

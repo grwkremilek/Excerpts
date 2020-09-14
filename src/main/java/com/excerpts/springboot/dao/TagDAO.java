@@ -77,9 +77,9 @@ public class TagDAO implements DAO<Tag> {
 	}
 
 	/**
-	 * Method returning a list of all excerpts
+	 * Method returning a list of all tags in the database
 	 *
-	 * @return excerpts a list of excerpts
+	 * @return tags a list of tags
 	 */
 	@Override
 	public List<Tag> getAll() {
@@ -90,10 +90,10 @@ public class TagDAO implements DAO<Tag> {
 	}
 
 	/**
-	 * Method returning a list of all excerpts from a book of the given title.
+	 * Method returning a list of all tags from a book of the given title.
 	 *
 	 * @param title user provided title of the book
-	 * @return excerpts a list of excerpts
+	 * @return tags a list of tags
 	 */
 	@Override
 	public List<Tag> getByTitle(String... params) {
@@ -105,10 +105,10 @@ public class TagDAO implements DAO<Tag> {
 	}
 
 	/**
-	 * Method returning a list of all excerpts by an author.
+	 * Method returning a list of all tags by an author.
 	 *
 	 * @param author user provided name of an author
-	 * @return excerpts a list of excerpts
+	 * @return tags a list of tags
 	 */
 	@Override
 	public List<Tag> getByAuthor(String... params) {
@@ -120,10 +120,10 @@ public class TagDAO implements DAO<Tag> {
 	}
 
 	/**
-	 * Method returning a list of all excerpts with the given tag
+	 * Method returning a list of all tags co-occurring with the tag requested
 	 *
 	 * @param tag user provided tag
-	 * @return excerpts a list of excerpts
+	 * @return tags a list of tags
 	 */
 	@Override
 	public List<Tag> getByTag(String... params) {
@@ -136,10 +136,10 @@ public class TagDAO implements DAO<Tag> {
 	}
 
 	/**
-	 * Method returning an excerpt with the given ID
+	 * Method returning all tags in the excerpt with the given ID
 	 *
 	 * @param excerptID user provided excerptID
-	 * @return excerpt
+	 * @return tags a list of tags
 	 */
 	@Override
 	public List<Tag> getByID(int excerptID) {
