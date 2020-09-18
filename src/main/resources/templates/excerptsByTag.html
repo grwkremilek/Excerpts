@@ -45,9 +45,9 @@ table th, table td {
 					<td style="border: 1px solid black;"
 						th:text="${descriptions[iter.index]}">Tags</td>
 					<td style="border: 1px solid black;"><a
-						th:href="@{/displayComments/{comments}(comments=${excerpt.comments})}">Comments</a>
+						th:href="@{/displayComments/{comments}(comments=${#uris.escapePath(excerpt.comments)})}">Comments</a>
 						<a
-						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/details{comments}/{description}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, comments=${excerpt.comments}, description=${descriptions[iter.index]})}">Edit</a>
+						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/details{comments}/{description}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, comments=${#uris.escapePath(excerpt.comments)}, description=${descriptions[iter.index]})}">Edit</a>
 						<a
 						th:href="@{/delete/{excerptID}/{author}/{title}/{tag}/details(excerptID=${excerpt.excerptID}, author='author', title='title', tag=${descriptions[iter.index]})}"
 						onclick="return confirm('Are you sure you want to delete this excerpt?');">Delete</a></td>

@@ -15,7 +15,7 @@ th.table1, td.table1 {
 
 table.table2 {
 	table-layout: fixed;
-	width: 800px;
+	width: 1000px;
 }
 
 th.table2, td.table2 {
@@ -97,12 +97,12 @@ input[type=submit] {
 			<tr>
 				<td>enter the name of the book</td>
 				<td><input type="text" th:field="${excerpt.title}" form="title" /></td>
-				<td class="validation-title"
-					th:if="${#fields.hasErrors('excerpt.title')}"
-					th:errors="${excerpt.title}"></td>
 				<td><button type="submit" name="parameter" value="title"
 						form="title">submit</button></td>
 				<td><button type="reset" form="title">reset</button></td>
+				<td class="validation-title"
+					th:if="${#fields.hasErrors('excerpt.title')}"
+					th:errors="${excerpt.title}"></td>
 			</tr>
 			<tr>
 				<td>enter the author's name</td>

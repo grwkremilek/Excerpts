@@ -19,7 +19,7 @@ public class TagValidator implements Validator {
 
 	public void validate(Object obj, Errors errors) {
 
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "error.description", "Please enter at least one tag");
+		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "error.description", "Please enter at least one tag.");
 
 		Tag tag = (Tag) obj;
 

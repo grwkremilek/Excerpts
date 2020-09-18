@@ -1,7 +1,11 @@
 package com.excerpts.springboot;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -22,6 +26,8 @@ import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Tag;
 import com.excerpts.springboot.validators.ExcerptValidator;
 import com.excerpts.springboot.validators.TagValidator;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Controller
 public class ExcerptController {
@@ -80,7 +86,7 @@ public class ExcerptController {
 		model.addAttribute("comments", comments);
 		model.addAttribute("description", description);
 
-		return "confirmExcerpt";
+		return "excerptConfirmation";
 	}
 
 	// display all excerpts in the database
@@ -100,7 +106,7 @@ public class ExcerptController {
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
-		return "getAll";
+		return "allExcerpts";
 	}
 
 	// retrieve all excerpts from the specified book
@@ -123,14 +129,14 @@ public class ExcerptController {
 		// excerpt in a string
 		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
 				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
-		
-		//replace empty comments with a message
+
+		// replace empty comments with a message
 		List<Excerpt> excerpts = replaceEmptyComments(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
-		return "getByTitle";
+		return "excerptsByTitle";
 	}
 
 	// retrieve all excerpts by the specified author
@@ -153,15 +159,15 @@ public class ExcerptController {
 		// excerpt in a string
 		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
 				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
-		
-		//replace empty comments with a message
+
+		// replace empty comments with a message
 		List<Excerpt> excerpts = replaceEmptyComments(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
-		return "getByAuthor";
+		return "excerptsByAuthor";
 	}
 
 	// retrieve all excerpts with the specified tag
@@ -185,15 +191,15 @@ public class ExcerptController {
 		// excerpt in a string
 		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
 				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
-		
-		//replace empty comments with a message
+
+		// replace empty comments with a message
 		List<Excerpt> excerpts = replaceEmptyComments(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
-		return "getByTag";
+		return "excerptsByTag";
 	}
 
 	// retrieve an excerpt with the specified excerpt ID
@@ -215,14 +221,14 @@ public class ExcerptController {
 		// excerpt in a string
 		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
 				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
-	
-		//replace empty comments with a message
+
+		// replace empty comments with a message
 		List<Excerpt> excerpts = replaceEmptyComments(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
 
-		return "getByExcerptID";
+		return "excerptByID";
 	}
 
 	// display a comment on a separate page
@@ -230,7 +236,7 @@ public class ExcerptController {
 	public String getComments(@PathVariable("comments") String comments, Model model) {
 
 		model.addAttribute("comments", comments);
-		return "displayComments";
+		return "comment";
 	}
 
 	// delete a specified excerpt
@@ -273,7 +279,7 @@ public class ExcerptController {
 
 		model.addAttribute("excerpt", excerpt);
 		model.addAttribute("tag", tag);
-		return "editExcerptForm";
+		return "editForm";
 	}
 
 	// truncates all tables and resets auto-increment
@@ -287,16 +293,41 @@ public class ExcerptController {
 
 	// displays all tags present in the database
 	@RequestMapping(value = "/getAllTags", method = RequestMethod.POST)
-	public String getAllTags(Model model) {
+	public String getAllTags(Model model) throws JsonGenerationException, JsonMappingException, IOException {
 
 		List<Tag> rawTags = tagDAO.getAll();
 		int count = tagDAO.countAll();
+		
+		//create a map for tag description frequencies
+		int frequency = 1;
+		List<String> tagDescriptions = rawTags.stream().map(Tag::getDescription).collect(Collectors.toList());
+		Map<String, Integer> frequencyMap = new HashMap<>();
+		Set<String> set1 = new LinkedHashSet<>();
+		for (String s : tagDescriptions) {
+		    if (!set1.add(s)) {
+		    	frequency = frequencyMap.get(s) + 1;
+		    }
+		    frequencyMap.put(s, frequency);
+		    frequency = 1;
+		}
+		
+		//create a list of maps required by anychart to create a word cloud
+		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+		
+        for (Map.Entry<String,Integer> entry : frequencyMap.entrySet()) {
+        	
+        	Map<String, Object> mp=new HashMap<String, Object>();
+        	mp.put("x", entry.getKey());
+        	mp.put("value", entry.getValue());    	
+        	data.add(mp);
+        }
 
 		// extract the descriptions from the list of tags, remove duplicates and sort
 		// alphabetically
 		Set<String> tags = rawTags.stream().map(Tag::getDescription)
 				.collect(Collectors.toCollection(() -> new TreeSet<>(String.CASE_INSENSITIVE_ORDER)));
 
+		model.addAttribute("data", data);
 		model.addAttribute("tags", tags);
 		model.addAttribute("count", count);
 

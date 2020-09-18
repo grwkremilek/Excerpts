@@ -2,8 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 
+
 <head>
 <meta charset="utf-8" />
+<title>Tags</title>
+<script
+	src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+<script
+	src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
 </head>
 
 <body>
@@ -14,14 +20,23 @@
 		database.</div>
 	<div th:unless="${#lists.isEmpty(tags)}">
 		<p>
-			<span th:text="${count}">number of tags </span> tags were
-			found
+			<span th:text="${count}">number of tags </span> tags were found
 		</p>
-		<table>
-			<tr th:each="tag: ${tags}">
-				<td th:text="${tag}" />
-			</tr>
-		</table>
+		<div style="display: inline" th:text="${tags}"></div>
 	</div>
+	<br><br><br>
+	<div id="container" style="width:800px;height:600px"></div>
+
+	<script th:inline="javascript">
+	anychart.onDocumentReady(function() {
+		
+		var data = [[${data}]];
+
+		  var chart = anychart.tagCloud(data);
+		  chart.angles([0])
+		  chart.container("container");
+		  chart.draw();
+		});
+	</script>
 </body>
 </html>
