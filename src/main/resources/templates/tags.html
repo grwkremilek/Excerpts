@@ -10,6 +10,13 @@
 	src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
 <script
 	src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
+
+<style>
+html, body, #container {
+	width: 95%;
+	height: 95%;
+}
+</style>
 </head>
 
 <body>
@@ -18,23 +25,23 @@
 	</div>
 	<div th:if="${#lists.isEmpty(tags)}">There are no tags in the
 		database.</div>
-	<div th:unless="${#lists.isEmpty(tags)}">
+	<!-- 	<div th:unless="${#lists.isEmpty(tags)}">
 		<p>
 			<span th:text="${count}">number of tags </span> tags were found
 		</p>
 		<div style="display: inline" th:text="${tags}"></div>
-	</div>
-	<br><br><br>
-	<div id="container" style="width:800px;height:600px"></div>
+	</div> -->
+	<div id="container"></div>
 
 	<script th:inline="javascript">
 	anychart.onDocumentReady(function() {
 		
-		var data = [[${data}]];
 
-		  var chart = anychart.tagCloud(data);
+		  var chart = anychart.tagCloud([[${data}]]);
+		  chart.palette(anychart.palettes.wines);
 		  chart.angles([0])
 		  chart.container("container");
+		  
 		  chart.draw();
 		});
 	</script>

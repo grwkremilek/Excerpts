@@ -320,7 +320,7 @@ public class ExcerptController {
         	mp.put("x", entry.getKey());
         	mp.put("value", entry.getValue());    	
         	data.add(mp);
-        }
+        }      
 
 		// extract the descriptions from the list of tags, remove duplicates and sort
 		// alphabetically

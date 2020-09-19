@@ -76,7 +76,7 @@ button {
 				</tr>
 				<tr>
 					<td colspan="8"><textarea rows="15" cols="150"
-							th:field="${excerpt.comments}" /></textarea></td>
+							th:field="${#uris.unescapePathSegment(excerpt.comments)}" /></textarea></td>
 					<td class="validation-comments" colspan="5"
 						th:if="${#fields.hasErrors('excerpt.comments')}"
 						th:errors="${excerpt.comments}"></td>

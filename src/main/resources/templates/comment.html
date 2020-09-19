@@ -12,7 +12,7 @@
 		<a href="/">Home</a>
 	</div>
 	<div align="left">
-		<p th:text="${#uris.unescapePath(comments)}" />
+		<p th:text="${#uris.unescapePathSegment(comments)}"/>
 	</div>
 </body>
 </html>
