@@ -58,7 +58,7 @@ public class ExcerptValidator implements Validator {
 
 			byte[] bytesText = excerpt.getText().getBytes(StandardCharsets.UTF_8);
 			int textInBytes = bytesText.length;
-			if (textInBytes > 1500) {
+			if (textInBytes > 2500) {
 				errors.rejectValue("text", "field.max.length", "The text is too long.");
 			}
 		}
@@ -67,7 +67,7 @@ public class ExcerptValidator implements Validator {
 
 			byte[] bytesComments = excerpt.getComments().getBytes(StandardCharsets.UTF_8);
 			int commentsInBytes = bytesComments.length;
-			if (commentsInBytes > 1000) {
+			if (commentsInBytes > 2500) {
 				errors.rejectValue("comments", "field.max.length", "The comments are too long.");
 			}
 		}

@@ -1,14 +1,9 @@
 package com.excerpts.springboot;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,8 +19,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.excerpts.springboot.dao.DAO;
 import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Tag;
+import com.excerpts.springboot.helperclass.HelperClass;
 import com.excerpts.springboot.validators.ExcerptValidator;
 import com.excerpts.springboot.validators.TagValidator;
+
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
@@ -38,9 +35,9 @@ public class ExcerptController {
 	private DAO<Tag> tagDAO;
 
 	@Autowired
-	ExcerptValidator excerptValidator;
+	private ExcerptValidator excerptValidator;
 	@Autowired
-	TagValidator tagValidator;
+	private TagValidator tagValidator;
 
 	// display the index page
 	@RequestMapping(value = "/")
@@ -53,8 +50,10 @@ public class ExcerptController {
 	// display a form creating a new excerpt
 	@RequestMapping(value = "/createExcerpt")
 	public String displayExcerptForm(Model model) {
+
 		model.addAttribute("excerpt", new Excerpt());
 		model.addAttribute("tag", new Tag());
+
 		return "newExcerptForm";
 	}
 
@@ -97,10 +96,7 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getAll();
 		int count = excerpts.size();
 
-		// extract descriptions from tags and concatenate descriptions belonging to one
-		// excerpt in a string
-		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
-				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
+		List<String> descriptions = HelperClass.concatenateTags(tags);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -125,17 +121,15 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getByTitle(title);
 		int count = rawExcerpts.size();
 
-		// extract descriptions from tags and concatenate descriptions belonging to one
-		// excerpt in a string
-		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
-				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
+		List<String> descriptions = HelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = replaceEmptyComments(rawExcerpts);
+		List<Excerpt> excerpts = HelperClass.replaceEmptyComments(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
+
 		return "excerptsByTitle";
 	}
 
@@ -155,13 +149,10 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getByAuthor(author);
 		int count = rawExcerpts.size();
 
-		// extract descriptions from tags and concatenate descriptions belonging to one
-		// excerpt in a string
-		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
-				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
+		List<String> descriptions = HelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = replaceEmptyComments(rawExcerpts);
+		List<Excerpt> excerpts = HelperClass.replaceEmptyComments(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -187,13 +178,10 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getByTag(description);
 		int count = rawExcerpts.size();
 
-		// extract descriptions from tags and concatenate descriptions belonging to one
-		// excerpt in a string
-		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
-				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
+		List<String> descriptions = HelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = replaceEmptyComments(rawExcerpts);
+		List<Excerpt> excerpts = HelperClass.replaceEmptyComments(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -217,13 +205,10 @@ public class ExcerptController {
 		List<Excerpt> rawExcerpts = exerptDAO.getByID(excerptID);
 		List<Tag> tags = tagDAO.getByID(excerptID);
 
-		// extract descriptions from tags and concatenate descriptions belonging to one
-		// excerpt in a string
-		List<String> descriptions = new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,
-				Collectors.mapping(Tag::getDescription, Collectors.joining(";")))).values());
+		List<String> descriptions = HelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = replaceEmptyComments(rawExcerpts);
+		List<Excerpt> excerpts = HelperClass.replaceEmptyComments(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -277,8 +262,11 @@ public class ExcerptController {
 	@RequestMapping(value = "/edit/{excerptID}/{author}/{title}/{text}/{comments}/{description}")
 	public String displayEdit(Excerpt excerpt, Tag tag, Model model) {
 
-		model.addAttribute("excerpt", excerpt);
+		Excerpt decodedExcerpt = HelperClass.decode(excerpt);
+
+		model.addAttribute("excerpt", decodedExcerpt);
 		model.addAttribute("tag", tag);
+
 		return "editForm";
 	}
 
@@ -288,6 +276,7 @@ public class ExcerptController {
 
 		tagDAO.resetTables();
 		exerptDAO.resetTables();
+
 		return "redirect:/";
 	}
 
@@ -297,51 +286,14 @@ public class ExcerptController {
 
 		List<Tag> rawTags = tagDAO.getAll();
 		int count = tagDAO.countAll();
-		
-		//create a map for tag description frequencies
-		int frequency = 1;
-		List<String> tagDescriptions = rawTags.stream().map(Tag::getDescription).collect(Collectors.toList());
-		Map<String, Integer> frequencyMap = new HashMap<>();
-		Set<String> set1 = new LinkedHashSet<>();
-		for (String s : tagDescriptions) {
-		    if (!set1.add(s)) {
-		    	frequency = frequencyMap.get(s) + 1;
-		    }
-		    frequencyMap.put(s, frequency);
-		    frequency = 1;
-		}
-		
-		//create a list of maps required by anychart to create a word cloud
-		List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
-		
-        for (Map.Entry<String,Integer> entry : frequencyMap.entrySet()) {
-        	
-        	Map<String, Object> mp=new HashMap<String, Object>();
-        	mp.put("x", entry.getKey());
-        	mp.put("value", entry.getValue());    	
-        	data.add(mp);
-        }      
 
-		// extract the descriptions from the list of tags, remove duplicates and sort
-		// alphabetically
-		Set<String> tags = rawTags.stream().map(Tag::getDescription)
-				.collect(Collectors.toCollection(() -> new TreeSet<>(String.CASE_INSENSITIVE_ORDER)));
+		List<Map<String, Object>> data = HelperClass.createAnyChartData(rawTags);
+		Set<String> tags = HelperClass.organizeTags(rawTags);
 
 		model.addAttribute("data", data);
-		model.addAttribute("tags", tags);
 		model.addAttribute("count", count);
+		model.addAttribute("tags", tags);
 
 		return "tags";
-	}
-
-	public List<Excerpt> replaceEmptyComments(List<Excerpt> excerpts) {
-
-		for (Excerpt excerpt : excerpts) {
-			String comments = excerpt.getComments();
-			if (comments.isEmpty()) {
-				excerpt.setComments("No comment yet");
-			}
-		}
-		return excerpts;
 	}
 }

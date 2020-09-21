@@ -27,7 +27,7 @@ public class TagValidator implements Validator {
 
 			byte[] bytesTags = tag.getDescription().getBytes(StandardCharsets.UTF_8);
 			int tagsInBytes = bytesTags.length;
-			if (tagsInBytes > 45) {
+			if (tagsInBytes > 255) {
 				errors.rejectValue("tags", "field.max.length", "There are too many tags.");
 			}
 		}

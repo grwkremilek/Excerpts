@@ -44,7 +44,7 @@ table th, table td {
 					<td style="border: 1px solid black;"><a
 						th:href="@{/displayComments/{comments}(comments=${#uris.escapePathSegment(excerpt.comments)})}">Comments</a>
 						<a
-						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{comments}/{description}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, comments=${#uris.escapePathSegment(excerpt.comments)}, description=${descriptions[iter.index]})}">Edit</a>
+						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{comments}/{description}(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${#uris.escapePathSegment(excerpt.text)}, comments=${#uris.escapePathSegment(excerpt.comments)}, description=${descriptions[iter.index]})}">Edit</a>
 						<a
 						th:href="@{/delete/{excerptID}/{author}/{title}/{tag}(excerptID=${excerpt.excerptID}, author='author', title=${excerpt.title}, tag='tag')}"
 						onclick="return confirm('Are you sure you want to delete this excerpt?');">Delete</a></td>
