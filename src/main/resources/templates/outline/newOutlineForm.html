@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<style>
+input[type=text] {
+	width: 90%;
+	box-sizing: border-box;
+}
+
+button {
+	background-color: #7986b5;
+	border: none;
+	color: white;
+	padding: 4px 32px;
+	text-align: center;
+	font-size: 14px;
+}
+
+.validation-plot, .validation-comments, .validation-tag {
+	color: #d1cb1d;
+}
+</style>
+
+<meta charset="utf-8" />
+<title>new outline form</title>
+</head>
+
+<body>
+	<div align="right">
+		<a href="/">home</a>
+	</div>
+
+	<div align="center">
+		<h2>create a new outline</h2>
+		<br />
+		<form action="#" th:action="@{/saveOutline}" method="post">
+
+			<table style="width: 100%;">
+				<tr>
+					<td>plot</td>
+					<td rowspan="3"><textarea rows="10" cols="90"
+							th:field="${outline.plot}" /></textarea></td>
+					<td rowspan="3" class="validation-plot"
+						th:if="${#fields.hasErrors('outline.plot')}"
+						th:errors="${outline.plot}"></td>
+
+					<td>comments</td>
+					<td colspan="6"><textarea rows="15" cols="150"
+							th:field="${outline.comments}" /></textarea></td>
+					<td class="validation-comments" colspan="5"
+						th:if="${#fields.hasErrors('outline.comments')}"
+						th:errors="${outline.comments}"></td>
+				</tr>
+
+				<tr>
+					<td>tags</td>
+					<td><input type="text" th:field="${tag.description}" /></td>
+					<td class="validation-tag"
+						th:if="${#fields.hasErrors('tag.description')}"
+						th:errors="${tag.description}" /></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><button type="submit">save</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

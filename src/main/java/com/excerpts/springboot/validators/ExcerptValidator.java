@@ -22,18 +22,22 @@ public class ExcerptValidator implements Validator {
 		Excerpt excerpt = (Excerpt) obj;
 
 		if (excerpt.getExcerptID() == 0) {
+
 			if (excerpt.getAuthor() == null && excerpt.getTitle() == null && excerpt.getText() == null
 					&& excerpt.getComments() == null) {
+				
 				errors.rejectValue("excerptID", "field.min.value", "Please entrer a valid ID.");
 			}
 		}
 
 		if (excerpt.getAuthor() != null) {
+
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "author", "error.author",
 					"Please enter the name of the author.");
 
 			byte[] bytesAuthor = excerpt.getAuthor().getBytes(StandardCharsets.UTF_8);
 			int authorInBytes = bytesAuthor.length;
+			
 			if (authorInBytes > 45) {
 				errors.rejectValue("author", "field.max.length", "The author's name is too long.");
 			}
@@ -46,7 +50,9 @@ public class ExcerptValidator implements Validator {
 
 			byte[] bytesTitle = excerpt.getTitle().getBytes(StandardCharsets.UTF_8);
 			int titleInBytes = bytesTitle.length;
+			
 			if (titleInBytes > 255) {
+
 				errors.rejectValue("title", "field.max.length", "The title is too long.");
 			}
 		}
@@ -58,7 +64,9 @@ public class ExcerptValidator implements Validator {
 
 			byte[] bytesText = excerpt.getText().getBytes(StandardCharsets.UTF_8);
 			int textInBytes = bytesText.length;
+			
 			if (textInBytes > 2500) {
+
 				errors.rejectValue("text", "field.max.length", "The text is too long.");
 			}
 		}
@@ -67,7 +75,9 @@ public class ExcerptValidator implements Validator {
 
 			byte[] bytesComments = excerpt.getComments().getBytes(StandardCharsets.UTF_8);
 			int commentsInBytes = bytesComments.length;
+			
 			if (commentsInBytes > 2500) {
+
 				errors.rejectValue("comments", "field.max.length", "The comments are too long.");
 			}
 		}

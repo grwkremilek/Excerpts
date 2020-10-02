@@ -1,4 +1,4 @@
-package com.excerpts.springboot;
+package com.excerpts.springboot.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.excerpts.springboot.dao.DAO;
+import com.excerpts.springboot.dao.excerpt.ExcerptDAOInterface;
+import com.excerpts.springboot.dao.tag.TagDAOInterface;
 import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Tag;
 import com.excerpts.springboot.helperclass.HelperClass;
@@ -30,22 +31,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public class ExcerptController {
 
 	@Autowired
-	private DAO<Excerpt> exerptDAO;
+	private ExcerptDAOInterface<Excerpt> exerptDAO;
 	@Autowired
-	private DAO<Tag> tagDAO;
+	private TagDAOInterface tagDAO;
 
 	@Autowired
 	private ExcerptValidator excerptValidator;
 	@Autowired
 	private TagValidator tagValidator;
-
-	// display the index page
-	@RequestMapping(value = "/")
-	public String viewIndexPage(Model model) {
-		model.addAttribute("excerpt", new Excerpt());
-		model.addAttribute("tag", new Tag());
-		return "index";
-	}
 
 	// display a form creating a new excerpt
 	@RequestMapping(value = "/createExcerpt")
@@ -54,7 +47,7 @@ public class ExcerptController {
 		model.addAttribute("excerpt", new Excerpt());
 		model.addAttribute("tag", new Tag());
 
-		return "newExcerptForm";
+		return "excerpt/newExcerptForm";
 	}
 
 	// save a new or edited excerpt
@@ -67,7 +60,7 @@ public class ExcerptController {
 		tagValidator.validate(tag, tagResult);
 
 		if (excerptResult.hasErrors() || tagResult.hasErrors()) {
-			return "newExcerptForm";
+			return "excerpt/newExcerptForm";
 		}
 
 		String author = excerpt.getAuthor();
@@ -85,12 +78,12 @@ public class ExcerptController {
 		model.addAttribute("comments", comments);
 		model.addAttribute("description", description);
 
-		return "excerptConfirmation";
+		return "excerpt/excerptConfirmation";
 	}
 
-	// display all excerpts in the database
-	@RequestMapping("/getAll")
-	public String getAll(Model model) {
+	// display all excerpts
+	@RequestMapping("/getAllExcerpts")
+	public String getAllExcerpts(Model model) {
 
 		List<Excerpt> excerpts = exerptDAO.getAll();
 		List<Tag> tags = tagDAO.getAll();
@@ -102,7 +95,7 @@ public class ExcerptController {
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
-		return "allExcerpts";
+		return "excerpt/allExcerpts";
 	}
 
 	// retrieve all excerpts from the specified book
@@ -130,7 +123,7 @@ public class ExcerptController {
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
-		return "excerptsByTitle";
+		return "excerpt/excerptsByTitle";
 	}
 
 	// retrieve all excerpts by the specified author
@@ -158,7 +151,7 @@ public class ExcerptController {
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
-		return "excerptsByAuthor";
+		return "excerpt/excerptsByAuthor";
 	}
 
 	// retrieve all excerpts with the specified tag
@@ -187,7 +180,7 @@ public class ExcerptController {
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
-		return "excerptsByTag";
+		return "excerpt/excerptsByTag";
 	}
 
 	// retrieve an excerpt with the specified excerpt ID
@@ -213,7 +206,7 @@ public class ExcerptController {
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
 
-		return "excerptByID";
+		return "excerpt/excerptByID";
 	}
 
 	// display a comment on a separate page
@@ -221,7 +214,7 @@ public class ExcerptController {
 	public String getComments(@PathVariable("comments") String comments, Model model) {
 
 		model.addAttribute("comments", comments);
-		return "comment";
+		return "excerpt/comment";
 	}
 
 	// delete a specified excerpt
@@ -255,7 +248,7 @@ public class ExcerptController {
 			redirectAttributes.addAttribute("parameter", "excerptID");
 		}
 
-		return "redirect:/getByParameter";
+		return "redirect:/excerpt/getByParameter";
 	}
 
 	// displays a form for existing tag edits
@@ -267,17 +260,7 @@ public class ExcerptController {
 		model.addAttribute("excerpt", decodedExcerpt);
 		model.addAttribute("tag", tag);
 
-		return "editForm";
-	}
-
-	// truncates all tables and resets auto-increment
-	@RequestMapping(value = "/truncateTables")
-	public String truncateTables() {
-
-		tagDAO.resetTables();
-		exerptDAO.resetTables();
-
-		return "redirect:/";
+		return "excerpt/editExcerptForm";
 	}
 
 	// displays all tags present in the database

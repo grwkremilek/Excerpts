@@ -1,4 +1,4 @@
-package com.excerpts.springboot.dao;
+package com.excerpts.springboot.dao.excerpt;
 
 import java.util.List;
 
@@ -12,19 +12,10 @@ import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.mappers.ExcerptMapper;
 
 @Repository
-public class ExcerptDAO implements DAO<Excerpt> {
+public class ExcerptDAOClass implements ExcerptDAOInterface<Excerpt> {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-
-	/**
-	 * Method creating a new excerpt in the table Excerpt
-	 *
-	 * @param author   user provided name of the author
-	 * @param title    user provided title of the book
-	 * @param text     user provided text of the excerpt
-	 * @param comments user provided comments to the text
-	 */
 
 	@Transactional
 	@Override
@@ -47,11 +38,6 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		}
 	}
 
-	/**
-	 * Method returning a list of all excerpts
-	 *
-	 * @return excerpts a list of excerpts
-	 */
 	@Override
 	public List<Excerpt> getAll() {
 
@@ -60,12 +46,6 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		return excerpts;
 	}
 
-	/**
-	 * Method returning a list of all excerpts from a book of the given title.
-	 *
-	 * @param title user provided title of the book
-	 * @return excerpts a list of excerpts
-	 */
 	@Override
 	public List<Excerpt> getByTitle(String... params) {
 
@@ -75,26 +55,15 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		return excerpts;
 	}
 
-	/**
-	 * Method returning a list of all excerpts by an author.
-	 *
-	 * @param author user provided name of an author
-	 * @return excerpts a list of excerpts
-	 */
 	@Override
 	public List<Excerpt> getByAuthor(String... params) {
+
 		String author = params[0];
 		String SQL = "SELECT * FROM Excerpt WHERE author = ? ORDER BY title";
-		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { author }, new ExcerptMapper());	
+		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { author }, new ExcerptMapper());
 		return excerpts;
 	}
 
-	/**
-	 * Method returning a list of all excerpts with the given tag
-	 *
-	 * @param tag user provided tag
-	 * @return excerpts a list of excerpts
-	 */
 	@Override
 	public List<Excerpt> getByTag(String... params) {
 
@@ -104,14 +73,9 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		return excerpts;
 	}
 
-	/**
-	 * Method returning an excerpt with the given ID
-	 *
-	 * @param excerptID user provided excerptID
-	 * @return excerpt
-	 */
 	@Override
 	public List<Excerpt> getByID(int excerptID) {
+
 		String SQL = "SELECT * FROM Excerpt WHERE excerptID = ?";
 
 		try {
@@ -122,21 +86,12 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		}
 	}
 
-	/**
-	 * Help method counting all entries in Excerpt used in unit tests
-	 * 
-	 * @return count
-	 */
 	@Override
 	public int countAll() {
+
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Excerpt", Integer.class);
 	}
 
-	/**
-	 * Method deleting an existing excerpt
-	 *
-	 * @param excerptID
-	 */
 	@Override
 	public void delete(int excerptID) {
 
@@ -144,9 +99,8 @@ public class ExcerptDAO implements DAO<Excerpt> {
 		jdbcTemplate.update(excerptSQL, excerptID);
 	}
 
-	/**
-	 * Method deleting all entries in the table Excerpt and restarting auto-increment
-	 */
+	// Method deleting all entries in the table Excerpt and restarting
+	// auto-increment
 	@Override
 	public void resetTables() {
 		/*

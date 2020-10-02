@@ -7,15 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public interface DAO<T> {
+public interface DAOInterface<T> {
 
 	public void save(int id, String... params);
 
 	public List<T> getAll();
 
 	public List<T> getByTitle(String... params);
-
-	public List<T> getByAuthor(String... params);
 
 	public List<T> getByTag(String... params);
 
@@ -25,9 +23,7 @@ public interface DAO<T> {
 
 	public void delete(int id);
 
-	/**
-	 * Method deleting all entries in the database tables and restarting
-	 * auto-increment in the ID column
-	 */
+	// Method deleting all entries in the database tables and restarting
+	// auto-increment in the ID column
 	public void resetTables();
 }

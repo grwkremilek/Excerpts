@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<title>List of all outlines</title>
+<style>
+table th, table td {
+	padding: 5px;
+}
+</style>
+</head>
+
+<body>
+	<div align="right">
+		<a href="/">Home</a>
+	</div>
+
+	<div th:if="${#lists.isEmpty(outlines)}">The database is empty.</div>
+	<div th:unless="${#lists.isEmpty(outlines)}">
+		<p>
+			<span th:text="${count}">number of outlines </span> outlines were
+			found
+		</p>
+		<table
+			style="width: 100%; border: 1px solid black; border-collapse: collapse;">
+			<thead style="border: 1px solid black;">
+				<tr>
+					<th>ID</th>
+					<th>Plot</th>
+					<th>Comments</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="outline, iter : ${outlines}">
+					<td style="border: 1px solid black;" th:text="${outline.outlineID}">Title</td>
+					<td style="border: 1px solid black;" th:text="${outline.plot}">ExcerptID</td>
+					<td style="border: 1px solid black;" th:text="${outline.comments}">Author</td>
+					<td style="border: 1px solid black;"
+						th:text="${descriptions[iter.index]}">Tags</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

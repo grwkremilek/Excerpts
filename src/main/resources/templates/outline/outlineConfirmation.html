@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<title>Outline added to the database</title>
+</head>
+
+<body>
+	<div align="right">
+		<a href="/">Home</a>
+	</div>
+	<div align="right">
+		<a href="createOutline">Create another outline</a> <br /> <br />
+	</div>
+	<div align="left">
+		<h2>information added to the database</h2>
+		<table style="width: 40%;">
+			<tr>
+				<td>author</td>
+				<td th:text="${outline.plot}" /></td>
+			</tr>
+			<tr>
+				<td>comments</td>
+				<td th:text="${outline.comments}" /></td>
+		</table>
+	</div>
+</body>
+</html>

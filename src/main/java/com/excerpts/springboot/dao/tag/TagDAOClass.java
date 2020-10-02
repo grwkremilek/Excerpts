@@ -1,4 +1,4 @@
-package com.excerpts.springboot.dao;
+package com.excerpts.springboot.dao.tag;
 
 import java.util.List;
 
@@ -7,29 +7,22 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.excerpts.springboot.domain.Outline;
 import com.excerpts.springboot.domain.Tag;
 import com.excerpts.springboot.mappers.TagMapper;
 
 @Repository
-public class TagDAO implements DAO<Tag> {
+public class TagDAOClass implements TagDAOInterface {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-
-	/**
-	 * Method creating a new tag if not already present in the tag table and mapping
-	 * between a tag and an excerpt in the tagmap table.
-	 *
-	 * @param excerptID
-	 * 
-	 * @return tagID
-	 */
 
 	@Transactional
 	@Override
 	public void save(int excerptID, String... params) {
 
-		String[] descriptions = params[0].trim().split("\\s*;\\s*");;
+		String[] descriptions = params[0].trim().split("\\s*;\\s*");
+		;
 
 		if (excerptID == 0) {
 
@@ -76,11 +69,6 @@ public class TagDAO implements DAO<Tag> {
 		}
 	}
 
-	/**
-	 * Method returning a list of all tags in the database
-	 *
-	 * @return tags a list of tags
-	 */
 	@Override
 	public List<Tag> getAll() {
 
@@ -89,12 +77,6 @@ public class TagDAO implements DAO<Tag> {
 		return tags;
 	}
 
-	/**
-	 * Method returning a list of all tags from a book of the given title.
-	 *
-	 * @param title user provided title of the book
-	 * @return tags a list of tags
-	 */
 	@Override
 	public List<Tag> getByTitle(String... params) {
 
@@ -104,12 +86,6 @@ public class TagDAO implements DAO<Tag> {
 		return tags;
 	}
 
-	/**
-	 * Method returning a list of all tags by an author.
-	 *
-	 * @param author user provided name of an author
-	 * @return tags a list of tags
-	 */
 	@Override
 	public List<Tag> getByAuthor(String... params) {
 
@@ -119,12 +95,7 @@ public class TagDAO implements DAO<Tag> {
 		return tags;
 	}
 
-	/**
-	 * Method returning a list of all tags co-occurring with the tag requested
-	 *
-	 * @param tag user provided tag
-	 * @return tags a list of tags
-	 */
+	//returns all tags that co-occur with the searched tag in the given entries
 	@Override
 	public List<Tag> getByTag(String... params) {
 
@@ -135,12 +106,6 @@ public class TagDAO implements DAO<Tag> {
 
 	}
 
-	/**
-	 * Method returning all tags in the excerpt with the given ID
-	 *
-	 * @param excerptID user provided excerptID
-	 * @return tags a list of tags
-	 */
 	@Override
 	public List<Tag> getByID(int excerptID) {
 
@@ -149,21 +114,11 @@ public class TagDAO implements DAO<Tag> {
 		return tags;
 	}
 
-	/**
-	 * Help method counting all entries in Excerpt used in unit tests
-	 * 
-	 * @return count
-	 */
 	@Override
 	public int countAll() {
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Tag", Integer.class);
 	}
 
-	/**
-	 * Method deleting an existing excerpt
-	 *
-	 * @param excerptID
-	 */
 	@Override
 	public void delete(int excerptID) {
 
@@ -171,20 +126,33 @@ public class TagDAO implements DAO<Tag> {
 		jdbcTemplate.update(deleteTagSQL, excerptID);
 	}
 
-	/**
-	 * Method deleting all entries in the tables Tag and Tagmap and restarting
-	 * auto-increment
-	 */
+	// Method deleting all entries in the tables Tag and Tagmap and restarting
+	// auto-increment
 	public void resetTables() {
 
 		String removeChecksSQL = "SET FOREIGN_KEY_CHECKS = 0";
 		jdbcTemplate.update(removeChecksSQL);
+
 		String tagmapSQL = "TRUNCATE table Tagmap";
 		jdbcTemplate.update(tagmapSQL);
+
 		String tagSQL = "TRUNCATE table Tag";
 		jdbcTemplate.update(tagSQL);
+
 		String renewChecksSQL = "SET FOREIGN_KEY_CHECKS = 1";
 		jdbcTemplate.update(renewChecksSQL);
 
+	}
+
+	@Override
+	public List<Outline> getByGenre(String... params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Outline> getByResource(String... params) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -76,7 +76,8 @@ input[type=submit] {
 		<form th:action="@{getAllTags}" method="post" id="tags"></form>
 		<table class="table2">
 			<tr>
-				<td><a href="/getAll">display all excerpts in the database</a></td>
+				<td><a href="getAllExcerpts">display all excerpts in the
+						database</a></td>
 			</tr>
 			<tr>
 				<td><a href="createExcerpt">create a new excerpt</a></td>
@@ -137,6 +138,18 @@ input[type=submit] {
 					th:errors="${excerpt.excerptID}"></td>
 			</tr>
 		</table>
+	</div>
+	<div>
+		<table class="table2">
+			<tr>
+				<td><a href="getAllOutlines">display all outlines in the
+						database</a></td>
+			</tr>
+			<tr>
+				<td><a href="createOutline">create a new outline</a></td>
+			</tr>
+		</table>
+
 	</div>
 </body>
 </html>
