@@ -12,11 +12,12 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.excerpts.springboot.domain.Excerpt;
+import com.excerpts.springboot.domain.Outline;
 import com.excerpts.springboot.domain.Tag;
 
 public class HelperClass {
 
-	public static List<Excerpt> replaceEmptyComments(List<Excerpt> excerpts) {
+	public static List<Excerpt> replaceEmptyCommentsExcerpts(List<Excerpt> excerpts) {
 
 		for (Excerpt excerpt : excerpts) {
 			String comments = excerpt.getComments();
@@ -26,6 +27,19 @@ public class HelperClass {
 		}
 		return excerpts;
 	}
+	
+	public static List<Outline> replaceEmptyCommentsOutline(List<Outline> outlines) {
+
+		for (Outline outline : outlines) {
+			String comments = outline.getComments();
+			if (comments.isEmpty()) {
+				outline.setComments("No comment yet");
+			}
+		}
+		return outlines;
+	}
+	
+	
 
 	// extract descriptions from tags and concatenate descriptions belonging to one
 	// excerpt in a string

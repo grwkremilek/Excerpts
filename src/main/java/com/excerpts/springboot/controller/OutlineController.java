@@ -87,5 +87,35 @@ public class OutlineController {
 
 			return "outline/allOutlines";
 		}
+		
+		// retrieve all outlines with the specified tag
+		@RequestMapping(value = "/getByTag", method = { RequestMethod.POST,
+				RequestMethod.GET })
+		public String processTag(@RequestParam(name = "description") String description,
+				@ModelAttribute("outline") Outline outline, @ModelAttribute("tag") Tag tag, BindingResult result,
+				Model model) {
+
+			tagValidator.validate(tag, result);
+
+			if (result.hasErrors()) {
+				return "index";
+			}
+
+			List<Outline> rawOutlines = outlineDAO.getByTag(description);
+			List<Tag> tags = tagDAO.getByTag(description);
+			int count = rawOutlines.size();
+
+			List<String> descriptions = HelperClass.concatenateTags(tags);
+
+			// replace empty comments with a message
+			List<Outline> outlines = HelperClass.replaceEmptyCommentsOutline(rawOutlines);
+
+			model.addAttribute("outlines", outlines);
+			model.addAttribute("descriptions", descriptions);
+			model.addAttribute("count", count);
+
+			return "outlines/outlinesByTag";
+		}
+
 
 }

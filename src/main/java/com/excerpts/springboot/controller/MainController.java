@@ -21,6 +21,7 @@ public class MainController {
 	// display the index page
 	@RequestMapping(value = "/")
 	public String viewIndexPage(Model model) {
+
 		model.addAttribute("excerpt", new Excerpt());
 		model.addAttribute("tag", new Tag());
 		return "index";

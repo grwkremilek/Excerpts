@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public class ExcerptController {
 
 	@Autowired
-	private ExcerptDAOInterface<Excerpt> exerptDAO;
+	private ExcerptDAOInterface<Excerpt> excerptDAO;
 	@Autowired
 	private TagDAOInterface tagDAO;
 
@@ -69,7 +69,7 @@ public class ExcerptController {
 		String comments = excerpt.getComments();
 		String description = tag.getDescription();
 
-		exerptDAO.save(excerptID, author, title, text, comments);
+		excerptDAO.save(excerptID, author, title, text, comments);
 		tagDAO.save(excerptID, description);
 
 		model.addAttribute("author", author);
@@ -85,7 +85,7 @@ public class ExcerptController {
 	@RequestMapping("/getAllExcerpts")
 	public String getAllExcerpts(Model model) {
 
-		List<Excerpt> excerpts = exerptDAO.getAll();
+		List<Excerpt> excerpts = excerptDAO.getAll();
 		List<Tag> tags = tagDAO.getAll();
 		int count = excerpts.size();
 
@@ -110,14 +110,14 @@ public class ExcerptController {
 			return "index";
 		}
 
-		List<Excerpt> rawExcerpts = exerptDAO.getByTitle(title);
+		List<Excerpt> rawExcerpts = excerptDAO.getByTitle(title);
 		List<Tag> tags = tagDAO.getByTitle(title);
 		int count = rawExcerpts.size();
 
 		List<String> descriptions = HelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = HelperClass.replaceEmptyComments(rawExcerpts);
+		List<Excerpt> excerpts = HelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -138,14 +138,14 @@ public class ExcerptController {
 			return "index";
 		}
 
-		List<Excerpt> rawExcerpts = exerptDAO.getByAuthor(author);
+		List<Excerpt> rawExcerpts = excerptDAO.getByAuthor(author);
 		List<Tag> tags = tagDAO.getByAuthor(author);
 		int count = rawExcerpts.size();
 
 		List<String> descriptions = HelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = HelperClass.replaceEmptyComments(rawExcerpts);
+		List<Excerpt> excerpts = HelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -167,14 +167,14 @@ public class ExcerptController {
 			return "index";
 		}
 
-		List<Excerpt> rawExcerpts = exerptDAO.getByTag(description);
+		List<Excerpt> rawExcerpts = excerptDAO.getByTag(description);
 		List<Tag> tags = tagDAO.getByTag(description);
 		int count = rawExcerpts.size();
 
 		List<String> descriptions = HelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = HelperClass.replaceEmptyComments(rawExcerpts);
+		List<Excerpt> excerpts = HelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -195,13 +195,13 @@ public class ExcerptController {
 			return "index";
 		}
 
-		List<Excerpt> rawExcerpts = exerptDAO.getByID(excerptID);
+		List<Excerpt> rawExcerpts = excerptDAO.getByID(excerptID);
 		List<Tag> tags = tagDAO.getByID(excerptID);
 
 		List<String> descriptions = HelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = HelperClass.replaceEmptyComments(rawExcerpts);
+		List<Excerpt> excerpts = HelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -223,7 +223,7 @@ public class ExcerptController {
 			@PathVariable("author") String author, @PathVariable("title") String title, @PathVariable("tag") String tag,
 			Model model) {
 
-		exerptDAO.delete(excerptID);
+		excerptDAO.delete(excerptID);
 		tagDAO.delete(excerptID);
 
 		// disambiguation to redirect to an excerpt with the given parameter

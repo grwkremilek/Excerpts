@@ -20,6 +20,9 @@
 
 	<properties>
 		<java.version>13</java.version>
+		<flyway.user>root</flyway.user>
+		<flyway.password>Plas-132471-tiC</flyway.password>
+		<flyway.url>jdbc:mysql://localhost:3306/excerptsdb</flyway.url>
 	</properties>
 
 	<dependencies>
@@ -47,17 +50,12 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-maven-plugin -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
+			<artifactId>flyway-maven-plugin</artifactId>
+			<version>7.0.0</version>
 		</dependency>
-		<dependency>
-			<groupId>com.smattme</groupId>
-			<artifactId>mysql-backup4j</artifactId>
-			<version>1.0.1</version>
-		</dependency>
-
-
 		<!-- TESTS -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
