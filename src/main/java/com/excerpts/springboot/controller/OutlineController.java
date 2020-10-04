@@ -16,7 +16,8 @@ import com.excerpts.springboot.dao.tag.TagDAOInterface;
 import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Outline;
 import com.excerpts.springboot.domain.Tag;
-import com.excerpts.springboot.helperclass.HelperClass;
+import com.excerpts.springboot.helperclass.OutlineHelperClass;
+import com.excerpts.springboot.helperclass.TagHelperClass;
 import com.excerpts.springboot.validators.OutlineValidator;
 import com.excerpts.springboot.validators.TagValidator;
 
@@ -79,7 +80,7 @@ public class OutlineController {
 			List<Tag> tags = tagDAO.getAll();
 			int count = outlines.size();
 
-			List<String> descriptions = HelperClass.concatenateTags(tags);
+			List<String> descriptions = TagHelperClass.concatenateTags(tags);
 
 			model.addAttribute("outlines", outlines);
 			model.addAttribute("descriptions", descriptions);
@@ -105,10 +106,10 @@ public class OutlineController {
 			List<Tag> tags = tagDAO.getByTag(description);
 			int count = rawOutlines.size();
 
-			List<String> descriptions = HelperClass.concatenateTags(tags);
+			List<String> descriptions = TagHelperClass.concatenateTags(tags);
 
 			// replace empty comments with a message
-			List<Outline> outlines = HelperClass.replaceEmptyCommentsOutline(rawOutlines);
+			List<Outline> outlines = OutlineHelperClass.replaceEmptyCommentsOutline(rawOutlines);
 
 			model.addAttribute("outlines", outlines);
 			model.addAttribute("descriptions", descriptions);

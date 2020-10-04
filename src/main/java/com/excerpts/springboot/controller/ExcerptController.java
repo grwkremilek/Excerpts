@@ -20,7 +20,8 @@ import com.excerpts.springboot.dao.excerpt.ExcerptDAOInterface;
 import com.excerpts.springboot.dao.tag.TagDAOInterface;
 import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Tag;
-import com.excerpts.springboot.helperclass.HelperClass;
+import com.excerpts.springboot.helperclass.ExcerptHelperClass;
+import com.excerpts.springboot.helperclass.TagHelperClass;
 import com.excerpts.springboot.validators.ExcerptValidator;
 import com.excerpts.springboot.validators.TagValidator;
 
@@ -89,7 +90,7 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getAll();
 		int count = excerpts.size();
 
-		List<String> descriptions = HelperClass.concatenateTags(tags);
+		List<String> descriptions = TagHelperClass.concatenateTags(tags);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -114,10 +115,10 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getByTitle(title);
 		int count = rawExcerpts.size();
 
-		List<String> descriptions = HelperClass.concatenateTags(tags);
+		List<String> descriptions = TagHelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = HelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
+		List<Excerpt> excerpts = ExcerptHelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -142,10 +143,10 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getByAuthor(author);
 		int count = rawExcerpts.size();
 
-		List<String> descriptions = HelperClass.concatenateTags(tags);
+		List<String> descriptions = TagHelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = HelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
+		List<Excerpt> excerpts = ExcerptHelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -171,10 +172,10 @@ public class ExcerptController {
 		List<Tag> tags = tagDAO.getByTag(description);
 		int count = rawExcerpts.size();
 
-		List<String> descriptions = HelperClass.concatenateTags(tags);
+		List<String> descriptions = TagHelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = HelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
+		List<Excerpt> excerpts = ExcerptHelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -198,10 +199,10 @@ public class ExcerptController {
 		List<Excerpt> rawExcerpts = excerptDAO.getByID(excerptID);
 		List<Tag> tags = tagDAO.getByID(excerptID);
 
-		List<String> descriptions = HelperClass.concatenateTags(tags);
+		List<String> descriptions = TagHelperClass.concatenateTags(tags);
 
 		// replace empty comments with a message
-		List<Excerpt> excerpts = HelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
+		List<Excerpt> excerpts = ExcerptHelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("descriptions", descriptions);
@@ -255,7 +256,7 @@ public class ExcerptController {
 	@RequestMapping(value = "/edit/{excerptID}/{author}/{title}/{text}/{comments}/{description}")
 	public String displayEdit(Excerpt excerpt, Tag tag, Model model) {
 
-		Excerpt decodedExcerpt = HelperClass.decode(excerpt);
+		Excerpt decodedExcerpt = ExcerptHelperClass.decode(excerpt);
 
 		model.addAttribute("excerpt", decodedExcerpt);
 		model.addAttribute("tag", tag);
@@ -270,8 +271,8 @@ public class ExcerptController {
 		List<Tag> rawTags = tagDAO.getAll();
 		int count = tagDAO.countAll();
 
-		List<Map<String, Object>> data = HelperClass.createAnyChartData(rawTags);
-		Set<String> tags = HelperClass.organizeTags(rawTags);
+		List<Map<String, Object>> data = TagHelperClass.createAnyChartData(rawTags);
+		Set<String> tags = TagHelperClass.organizeTags(rawTags);
 
 		model.addAttribute("data", data);
 		model.addAttribute("count", count);
