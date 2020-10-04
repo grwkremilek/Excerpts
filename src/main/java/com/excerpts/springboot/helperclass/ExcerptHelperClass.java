@@ -2,11 +2,19 @@ package com.excerpts.springboot.helperclass;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.excerpts.springboot.domain.Author;
 import com.excerpts.springboot.domain.Excerpt;
 
 public class ExcerptHelperClass {
+
+	public static List<String> extractNames(List<Author> authors) {
+
+		return new ArrayList<>(authors.stream().map(Author::getName).collect(Collectors.toList()));
+	}
 
 	public static List<Excerpt> replaceEmptyCommentsExcerpts(List<Excerpt> excerpts) {
 

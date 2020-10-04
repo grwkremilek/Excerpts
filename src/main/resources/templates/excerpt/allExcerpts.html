@@ -37,10 +37,11 @@ table th, table td {
 			<tbody>
 				<tr th:each="excerpt, iter : ${excerpts}">
 					<td style="border: 1px solid black;" th:text="${excerpt.excerptID}">ExcerptID</td>
-					<td style="border: 1px solid black;" th:text="${excerpt.author}">Author</td>
+					<td style="border: 1px solid black;" th:text="${authors[iter.index]}">Author</td>
 					<td style="border: 1px solid black;" th:text="${excerpt.title}">Title</td>
 					<td style="border: 1px solid black;" th:text="${excerpt.text}">Text</td>
-					<td style="border: 1px solid black;" th:text="${descriptions[iter.index]}">Tags</td>
+					<td style="border: 1px solid black;"
+						th:text="${descriptions[iter.index]}">Tags</td>
 				</tr>
 			</tbody>
 		</table>

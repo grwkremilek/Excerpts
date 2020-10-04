@@ -1,7 +1,5 @@
 package com.excerpts.springboot.helperclass;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -11,14 +9,12 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import com.excerpts.springboot.domain.Excerpt;
-import com.excerpts.springboot.domain.Outline;
 import com.excerpts.springboot.domain.Tag;
 
 public class TagHelperClass {
 
-	// extract descriptions from tags and concatenate descriptions belonging to one
-	// excerpt in a string
+	// extract descriptions from tags and concatenate descriptions that belong to
+	// one excerpt in a string
 	public static List<String> concatenateTags(List<Tag> tags) {
 
 		return new ArrayList<>(tags.stream().collect(Collectors.groupingBy(Tag::getExcerptID,

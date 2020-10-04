@@ -21,20 +21,19 @@ public class ExcerptDAOClass implements ExcerptDAOInterface<Excerpt> {
 	@Override
 	public void save(int excerptID, String... params) {
 
-		String author = params[0].trim();
-		String title = params[1].trim();
-		String text = params[2].trim();
-		String comments = params[3].trim();
+		String title = params[0].trim();
+		String text = params[1].trim();
+		String comments = params[2].trim();
 
 		if (excerptID == 0) {
 
-			String insertExcerptSQL = "INSERT INTO Excerpt (author, title, text, comments) values (?, ?, ?, ?)";
-			jdbcTemplate.update(insertExcerptSQL, author, title, text, comments);
+			String insertExcerptSQL = "INSERT INTO Excerpt (title, text, comments) values (?, ?, ?)";
+			jdbcTemplate.update(insertExcerptSQL, title, text, comments);
 
 		} else {
 
-			String updateExcerptSQL = "UPDATE Excerpt SET author = ?, title = ?, text = ? WHERE excerptID=?";
-			jdbcTemplate.update(updateExcerptSQL, author, title, text, excerptID);
+			String updateExcerptSQL = "UPDATE Excerpt SET title = ?, text = ? WHERE excerptID=?";
+			jdbcTemplate.update(updateExcerptSQL, title, text, excerptID);
 		}
 	}
 
@@ -50,7 +49,7 @@ public class ExcerptDAOClass implements ExcerptDAOInterface<Excerpt> {
 	public List<Excerpt> getByTitle(String... params) {
 
 		String title = params[0];
-		String SQL = "SELECT * FROM Excerpt WHERE title = ? ORDER BY author";
+		String SQL = "SELECT * FROM Excerpt WHERE title = ?";
 		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { title }, new ExcerptMapper());
 		return excerpts;
 	}
@@ -68,7 +67,7 @@ public class ExcerptDAOClass implements ExcerptDAOInterface<Excerpt> {
 	public List<Excerpt> getByTag(String... params) {
 
 		String description = params[0];
-		String SQL = "SELECT e.* from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE t.description = ? ORDER BY e.author";
+		String SQL = "SELECT e.* from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE t.description = ?";
 		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { description }, new ExcerptMapper());
 		return excerpts;
 	}

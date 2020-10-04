@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excerpts.springboot.dao.outline.OutlineDAOInterface;
 import com.excerpts.springboot.dao.tag.TagDAOInterface;
-import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Outline;
 import com.excerpts.springboot.domain.Tag;
 import com.excerpts.springboot.helperclass.OutlineHelperClass;

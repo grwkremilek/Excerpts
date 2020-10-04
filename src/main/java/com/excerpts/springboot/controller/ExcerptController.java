@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,12 +17,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.excerpts.springboot.dao.DAOInterface;
 import com.excerpts.springboot.dao.excerpt.ExcerptDAOInterface;
 import com.excerpts.springboot.dao.tag.TagDAOInterface;
+import com.excerpts.springboot.domain.Author;
 import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Tag;
 import com.excerpts.springboot.helperclass.ExcerptHelperClass;
 import com.excerpts.springboot.helperclass.TagHelperClass;
+import com.excerpts.springboot.validators.AuthorValidator;
 import com.excerpts.springboot.validators.ExcerptValidator;
 import com.excerpts.springboot.validators.TagValidator;
 
@@ -33,11 +37,20 @@ public class ExcerptController {
 
 	@Autowired
 	private ExcerptDAOInterface<Excerpt> excerptDAO;
+
+	@Autowired
+	@Qualifier("authorDAOClass")
+	private DAOInterface authorDAO;
+
 	@Autowired
 	private TagDAOInterface tagDAO;
 
 	@Autowired
 	private ExcerptValidator excerptValidator;
+
+	@Autowired
+	private AuthorValidator authorValidator;
+
 	@Autowired
 	private TagValidator tagValidator;
 
@@ -46,6 +59,7 @@ public class ExcerptController {
 	public String displayExcerptForm(Model model) {
 
 		model.addAttribute("excerpt", new Excerpt());
+		model.addAttribute("author", new Author());
 		model.addAttribute("tag", new Tag());
 
 		return "excerpt/newExcerptForm";
@@ -54,26 +68,29 @@ public class ExcerptController {
 	// save a new or edited excerpt
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String saveExcerpt(@RequestParam(name = "excerptID", defaultValue = "0") Integer excerptID,
-			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult excerptResult, @ModelAttribute("tag") Tag tag,
+			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult excerptResult,
+			@ModelAttribute("author") Author author, BindingResult authorResult, @ModelAttribute("tag") Tag tag,
 			BindingResult tagResult, Model model) {
 
 		excerptValidator.validate(excerpt, excerptResult);
+		authorValidator.validate(author, authorResult);
 		tagValidator.validate(tag, tagResult);
 
-		if (excerptResult.hasErrors() || tagResult.hasErrors()) {
+		if (excerptResult.hasErrors() || authorResult.hasErrors() || tagResult.hasErrors()) {
 			return "excerpt/newExcerptForm";
 		}
 
-		String author = excerpt.getAuthor();
+		String name = author.getName();
 		String title = excerpt.getTitle();
 		String text = excerpt.getText();
 		String comments = excerpt.getComments();
 		String description = tag.getDescription();
 
-		excerptDAO.save(excerptID, author, title, text, comments);
+		excerptDAO.save(excerptID, title, text, comments);
+		authorDAO.save(excerptID, name);
 		tagDAO.save(excerptID, description);
 
-		model.addAttribute("author", author);
+		model.addAttribute("name", name);
 		model.addAttribute("title", title);
 		model.addAttribute("text", text);
 		model.addAttribute("comments", comments);
@@ -87,12 +104,18 @@ public class ExcerptController {
 	public String getAllExcerpts(Model model) {
 
 		List<Excerpt> excerpts = excerptDAO.getAll();
+		List<Author> authors = authorDAO.getAll();
 		List<Tag> tags = tagDAO.getAll();
 		int count = excerpts.size();
 
 		List<String> descriptions = TagHelperClass.concatenateTags(tags);
+		List<String> names = ExcerptHelperClass.extractNames(authors);
+
+		System.out.println(authors);
+		System.out.println(names);
 
 		model.addAttribute("excerpts", excerpts);
+		model.addAttribute("authors", names);
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
@@ -102,8 +125,9 @@ public class ExcerptController {
 	// retrieve all excerpts from the specified book
 	@RequestMapping(value = "/getByParameter", method = { RequestMethod.POST,
 			RequestMethod.GET }, params = "parameter=title")
-	public String processTitle(@RequestParam(name = "title") String title, @ModelAttribute("tag") Tag tag,
-			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
+	public String processTitle(@RequestParam(name = "title") String title, @ModelAttribute("excerpt") Excerpt excerpt,
+			BindingResult result, @ModelAttribute("author") Author author, BindingResult authorResult,
+			@ModelAttribute("tag") Tag tag, Model model) {
 
 		excerptValidator.validate(excerpt, result);
 
@@ -112,6 +136,7 @@ public class ExcerptController {
 		}
 
 		List<Excerpt> rawExcerpts = excerptDAO.getByTitle(title);
+		List<Author> names = authorDAO.getByTitle(title);
 		List<Tag> tags = tagDAO.getByTitle(title);
 		int count = rawExcerpts.size();
 
@@ -121,6 +146,7 @@ public class ExcerptController {
 		List<Excerpt> excerpts = ExcerptHelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
+		model.addAttribute("authors", names);
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 

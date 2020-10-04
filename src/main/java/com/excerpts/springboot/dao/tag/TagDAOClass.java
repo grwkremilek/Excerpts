@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.excerpts.springboot.domain.Outline;
 import com.excerpts.springboot.domain.Tag;
@@ -17,12 +16,10 @@ public class TagDAOClass implements TagDAOInterface {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	@Transactional
 	@Override
 	public void save(int excerptID, String... params) {
 
 		String[] descriptions = params[0].trim().split("\\s*;\\s*");
-		;
 
 		if (excerptID == 0) {
 
@@ -35,7 +32,6 @@ public class TagDAOClass implements TagDAOInterface {
 			/* delete residual mappings of the edited excerpt */
 			String deleteMappingsSQL = "DELETE FROM tagmap WHERE excerptID = ?";
 			jdbcTemplate.update(deleteMappingsSQL, excerptID);
-			System.out.println("mappings deleted");
 		}
 
 		for (String description : descriptions) {
@@ -81,7 +77,7 @@ public class TagDAOClass implements TagDAOInterface {
 	public List<Tag> getByTitle(String... params) {
 
 		String title = params[0].trim();
-		String SQL = "SELECT e.excerptID, t.description from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE e.title = ? ORDER BY e.author";
+		String SQL = "SELECT e.excerptID, t.description from Excerpt AS e LEFT JOIN tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE e.title = ?";
 		List<Tag> tags = jdbcTemplate.query(SQL, new String[] { title }, new TagMapper());
 		return tags;
 	}

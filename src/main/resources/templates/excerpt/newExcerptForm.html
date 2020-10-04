@@ -41,10 +41,10 @@ button {
 			<table style="width: 100%;">
 				<tr>
 					<td>author</td>
-					<td><input type="text" th:field="${excerpt.author}" /></td>
+					<td><input type="text" th:field="${author.name}" /></td>
 					<td class="validation-author"
-						th:if="${#fields.hasErrors('excerpt.author')}"
-						th:errors="${excerpt.author}"></td>
+						th:if="${#fields.hasErrors('author.name')}"
+						th:errors="${author.name}"></td>
 
 					<td>text</td>
 					<td rowspan="3"><textarea rows="10" cols="90"
@@ -52,8 +52,8 @@ button {
 					<td rowspan="3" class="validation-text"
 						th:if="${#fields.hasErrors('excerpt.text')}"
 						th:errors="${excerpt.text}"></td>
-
 				</tr>
+
 				<tr>
 					<td>title</td>
 					<td><input type="text" th:field="${excerpt.title}" /></td>

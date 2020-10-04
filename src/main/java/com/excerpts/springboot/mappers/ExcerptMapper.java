@@ -12,7 +12,6 @@ public class ExcerptMapper implements RowMapper<Excerpt> {
 		Excerpt excerpt = new Excerpt();
 
 		excerpt.setExcerptID(rs.getInt("excerptID"));
-		excerpt.setAuthor(rs.getString("author"));
 		excerpt.setTitle(rs.getString("title"));
 		excerpt.setText(rs.getString("text"));
 		excerpt.setComments(rs.getString("comments"));

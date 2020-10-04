@@ -23,23 +23,10 @@ public class ExcerptValidator implements Validator {
 
 		if (excerpt.getExcerptID() == 0) {
 
-			if (excerpt.getAuthor() == null && excerpt.getTitle() == null && excerpt.getText() == null
+			if (excerpt.getTitle() == null && excerpt.getText() == null
 					&& excerpt.getComments() == null) {
 				
 				errors.rejectValue("excerptID", "field.min.value", "Please entrer a valid ID.");
-			}
-		}
-
-		if (excerpt.getAuthor() != null) {
-
-			ValidationUtils.rejectIfEmptyOrWhitespace(errors, "author", "error.author",
-					"Please enter the name of the author.");
-
-			byte[] bytesAuthor = excerpt.getAuthor().getBytes(StandardCharsets.UTF_8);
-			int authorInBytes = bytesAuthor.length;
-			
-			if (authorInBytes > 45) {
-				errors.rejectValue("author", "field.max.length", "The author's name is too long.");
 			}
 		}
 

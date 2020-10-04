@@ -2,25 +2,25 @@ package com.excerpts.springboot.domain;
 
 public class Author {
 	
-	private int authorID;
+	private int excerptID;
 	private String name;
 	
 	public Author() {
 		super();
 	}
 
-	public Author(int authorID, String name) {
+	public Author(int excerptID, String name) {
 		super();
-		this.authorID = authorID;
+		this.excerptID = excerptID;
 		this.name = name;
 	}
 
-	public int getAuthorID() {
-		return authorID;
+	public int getExcerptID() {
+		return excerptID;
 	}
 
-	public void setAuthorID(int authorID) {
-		this.authorID = authorID;
+	public void setExcerptID(int excerptID) {
+		this.excerptID = excerptID;
 	}
 
 	public String getName() {
@@ -33,6 +33,7 @@ public class Author {
 
 	@Override
 	public String toString() {
-		return "Author [authorID=" + authorID + ", name=" + name + "]";
+		return "Author [excerptID=" + excerptID + ", name=" + name + "]";
 	}
+
 }
