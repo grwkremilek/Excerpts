@@ -98,22 +98,4 @@ public class ExcerptDAOClass implements ExcerptDAOInterface<Excerpt> {
 		String excerptSQL = "DELETE FROM Excerpt WHERE excerptID = ?";
 		jdbcTemplate.update(excerptSQL, excerptID);
 	}
-
-	// Method deleting all entries in the table Excerpt and restarting
-	// auto-increment
-	@Override
-	public void resetTables() {
-		/*
-		 * it is required to switch off foreign key checks to change the tables and
-		 * afterwards reset it again
-		 */
-		String removeChecksSQL = "SET FOREIGN_KEY_CHECKS = 0";
-		jdbcTemplate.update(removeChecksSQL);
-
-		String excerptSQL = "TRUNCATE table Excerpt";
-		jdbcTemplate.update(excerptSQL);
-
-		String renewChecksSQL = "SET FOREIGN_KEY_CHECKS = 1";
-		jdbcTemplate.update(renewChecksSQL);
-	}
 }

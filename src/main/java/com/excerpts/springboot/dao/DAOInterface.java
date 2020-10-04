@@ -3,10 +3,8 @@ package com.excerpts.springboot.dao;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional
 public interface DAOInterface<T> {
 
 	public void save(int id, String... params);
@@ -23,7 +21,4 @@ public interface DAOInterface<T> {
 
 	public void delete(int id);
 
-	// Method deleting all entries in the database tables and restarting
-	// auto-increment in the ID column
-	public void resetTables();
 }

@@ -98,22 +98,4 @@ public class OutlineDAOClass implements OutlineDAOInterface<Outline> {
 		jdbcTemplate.update(SQL, outlineID);
 
 	}
-
-	@Override
-	public void resetTables() {
-
-		/*
-		 * it is required to switch off foreign key checks to change the tables and
-		 * afterwards reset it again
-		 */
-		String removeChecksSQL = "SET FOREIGN_KEY_CHECKS = 0";
-		jdbcTemplate.update(removeChecksSQL);
-
-		String excerptSQL = "TRUNCATE table Outline";
-		jdbcTemplate.update(excerptSQL);
-
-		String renewChecksSQL = "SET FOREIGN_KEY_CHECKS = 1";
-		jdbcTemplate.update(renewChecksSQL);
-
-	}
 }
