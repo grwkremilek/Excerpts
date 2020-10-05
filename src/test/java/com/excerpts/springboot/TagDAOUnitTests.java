@@ -24,7 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.excerpts.springboot.dao.tag.TagDAOClass;
+import com.excerpts.springboot.dao.TagDAO;
 import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Tag;
 import com.excerpts.springboot.mappers.TagMapper;
@@ -43,7 +43,7 @@ class TagDAOUnitTests {
 	Tag irony = new Tag(3, "irony");
 
 	@InjectMocks
-	private TagDAOClass tagDAO = new TagDAOClass();
+	private TagDAO tagDAO = new TagDAO();
 
 	@Mock
 	private JdbcTemplate mockJdbcTemplate;

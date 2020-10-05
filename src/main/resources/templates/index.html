@@ -91,7 +91,7 @@ input[type=submit] {
 		<form action="#" th:action="@{/getByParameter}" method="post"
 			id="title"></form>
 		<form action="#" th:action="@{/getByParameter}" method="post"
-			id="author"></form>
+			id="name"></form>
 		<form action="#" th:action="@{/getByParameter}" method="post" id="tag"></form>
 		<form action="#" th:action="@{/getByParameter}" method="post" id="id"></form>
 		<table class="table2">
@@ -107,14 +107,14 @@ input[type=submit] {
 			</tr>
 			<tr>
 				<td>enter the author's name</td>
-				<td><input type="text" th:field="${excerpt.author}"
-					form="author" /></td>
-				<td><button type="submit" name="parameter" value="author"
-						form="author">submit</button></td>
-				<td><button type="reset" form="author">reset</button></td>
+				<td><input type="text" th:field="${author.name}"
+					form="name" /></td>
+				<td><button type="submit" name="parameter" value="name"
+						form="name">submit</button></td>
+				<td><button type="reset" form="name">reset</button></td>
 				<td class="validation-author"
-					th:if="${#fields.hasErrors('excerpt.author')}"
-					th:errors="${excerpt.author}"></td>
+					th:if="${#fields.hasErrors('author.name')}"
+					th:errors="${author.name}"></td>
 			</tr>
 			<tr>
 				<td>enter a tag</td>

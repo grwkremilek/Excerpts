@@ -5,20 +5,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.excerpts.springboot.dao.excerpt.ExcerptDAOInterface;
-import com.excerpts.springboot.dao.tag.TagDAOInterface;
+import com.excerpts.springboot.domain.Author;
 import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Tag;
 import com.excerpts.springboot.maintenance.DbMaintenance;
 
 @Controller
 public class MainController {
-
-	@Autowired
-	private ExcerptDAOInterface<Excerpt> exerptDAO;
-
-	@Autowired
-	private TagDAOInterface tagDAO;
 
 	@Autowired
 	private DbMaintenance maintenance;
@@ -28,6 +21,7 @@ public class MainController {
 	public String viewIndexPage(Model model) {
 
 		model.addAttribute("excerpt", new Excerpt());
+		model.addAttribute("author", new Author());
 		model.addAttribute("tag", new Tag());
 		return "index";
 	}

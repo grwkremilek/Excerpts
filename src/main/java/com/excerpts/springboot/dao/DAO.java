@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DAOInterface<T> {
+public interface DAO<T> {
 
 	public void save(int id, String... params);
 

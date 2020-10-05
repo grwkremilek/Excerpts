@@ -1,4 +1,4 @@
-package com.excerpts.springboot.dao.outline;
+package com.excerpts.springboot.dao;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import com.excerpts.springboot.domain.Outline;
 import com.excerpts.springboot.mappers.OutlineMapper;
 
 @Repository
-public class OutlineDAOClass implements OutlineDAOInterface<Outline> {
+public class OutlineDAO implements DAO<Outline> {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -55,7 +55,7 @@ public class OutlineDAOClass implements OutlineDAOInterface<Outline> {
 	public List<Outline> getByTag(String... params) {
 
 		String description = params[0];
-		String SQL = "SELECT e.* from Outline AS e LEFT JOIN tagmap AS m ON m.outlineID = e.outlineID LEFT JOIN tag AS t ON t.tagID = m.tagID WHERE t.description = ?";
+		String SQL = "SELECT e.* from Outline AS e LEFT JOIN Tagmap AS m ON m.outlineID = e.outlineID LEFT JOIN Tag AS t ON t.tagID = m.tagID WHERE t.description = ?";
 		List<Outline> outlines = jdbcTemplate.query(SQL, new String[] { description }, new OutlineMapper());
 		return outlines;
 	}
@@ -71,18 +71,6 @@ public class OutlineDAOClass implements OutlineDAOInterface<Outline> {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
-	}
-
-	@Override
-	public List<Outline> getByGenre(String... params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Outline> getByResource(String... params) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

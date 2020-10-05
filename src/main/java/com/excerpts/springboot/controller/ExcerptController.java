@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.excerpts.springboot.dao.DAOInterface;
-import com.excerpts.springboot.dao.excerpt.ExcerptDAOInterface;
-import com.excerpts.springboot.dao.tag.TagDAOInterface;
+import com.excerpts.springboot.dao.DAO;
+import com.excerpts.springboot.dao.ParameterDAO;
 import com.excerpts.springboot.domain.Author;
 import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Tag;
@@ -36,14 +35,16 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public class ExcerptController {
 
 	@Autowired
-	private ExcerptDAOInterface<Excerpt> excerptDAO;
+	@Qualifier("excerptDAO")
+	private ParameterDAO<Excerpt> excerptDAO;
+	
+	@Autowired
+	@Qualifier("tagDAO")
+	private ParameterDAO<Tag> tagDAO;
 
 	@Autowired
-	@Qualifier("authorDAOClass")
-	private DAOInterface authorDAO;
-
-	@Autowired
-	private TagDAOInterface tagDAO;
+	@Qualifier("authorDAO")
+	private DAO<Author> authorDAO;
 
 	@Autowired
 	private ExcerptValidator excerptValidator;
@@ -111,9 +112,6 @@ public class ExcerptController {
 		List<String> descriptions = TagHelperClass.concatenateTags(tags);
 		List<String> names = ExcerptHelperClass.extractNames(authors);
 
-		System.out.println(authors);
-		System.out.println(names);
-
 		model.addAttribute("excerpts", excerpts);
 		model.addAttribute("authors", names);
 		model.addAttribute("descriptions", descriptions);
@@ -155,18 +153,20 @@ public class ExcerptController {
 
 	// retrieve all excerpts by the specified author
 	@RequestMapping(value = "/getByParameter", method = { RequestMethod.POST,
-			RequestMethod.GET }, params = "parameter=author")
-	public String processAuthor(@RequestParam(name = "author") String author, @ModelAttribute("tag") Tag tag,
-			@ModelAttribute("excerpt") Excerpt excerpt, BindingResult result, Model model) {
+			RequestMethod.GET }, params = "parameter=name")
+	public String processAuthor(@RequestParam(name = "name") String name,
+			@ModelAttribute("author") Author author, BindingResult result, @ModelAttribute("tag") Tag tag,
+			Model model) {
 
-		excerptValidator.validate(excerpt, result);
+		authorValidator.validate(author, result);
 
 		if (result.hasErrors()) {
 			return "index";
 		}
 
-		List<Excerpt> rawExcerpts = excerptDAO.getByAuthor(author);
-		List<Tag> tags = tagDAO.getByAuthor(author);
+		// get excerpts of the authors
+		List<Excerpt> rawExcerpts = excerptDAO.getByAuthor(name);
+		List<Tag> tags = tagDAO.getByAuthor(name);
 		int count = rawExcerpts.size();
 
 		List<String> descriptions = TagHelperClass.concatenateTags(tags);

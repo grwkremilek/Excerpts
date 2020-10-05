@@ -3,6 +3,7 @@ package com.excerpts.springboot.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.excerpts.springboot.dao.outline.OutlineDAOInterface;
-import com.excerpts.springboot.dao.tag.TagDAOInterface;
+import com.excerpts.springboot.dao.DAO;
 import com.excerpts.springboot.domain.Outline;
 import com.excerpts.springboot.domain.Tag;
 import com.excerpts.springboot.helperclass.OutlineHelperClass;
@@ -24,12 +24,16 @@ import com.excerpts.springboot.validators.TagValidator;
 public class OutlineController {
 	
 	@Autowired
-	private OutlineDAOInterface<Outline> outlineDAO;
+	@Qualifier("outlineDAO")
+	private DAO<Outline> outlineDAO;
+	
 	@Autowired
-	private TagDAOInterface tagDAO;
+	@Qualifier("tagDAO")
+	private DAO<Tag> tagDAO;
 
 	@Autowired
 	private OutlineValidator outlineValidator;
+	
 	@Autowired
 	private TagValidator tagValidator;
 	
