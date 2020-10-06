@@ -23,7 +23,7 @@ public class TagDAO implements ParameterDAO<Tag> {
 		if (excerptID == 0) {
 
 			/* fetch the ID of the newly created excerpt */
-			String getExcerptIDSQL = "SELECT LAST_INSERT_ID()";
+			String getExcerptIDSQL = "SELECT excerptID FROM Excerpt ORDER BY excerptID DESC LIMIT 1";
 			excerptID = jdbcTemplate.queryForObject(getExcerptIDSQL, Integer.class);
 
 		} else {

@@ -21,8 +21,8 @@ table th, table td {
 		this author in the database.</div>
 	<div th:unless="${#lists.isEmpty(excerpts)}">
 		<p>
-			<span th:text="${count}">number of excerpts </span> excerpts were
-			found
+			<span th:text="${author.name}">name of the author </span> <br> <span
+				th:text="${count}">number of excerpts </span> excerpts were found
 		</p>
 		<table
 			style="width: 100%; border: 1px solid black; border-collapse: collapse;">
@@ -45,9 +45,9 @@ table th, table td {
 					<td style="border: 1px solid black;"><a
 						th:href="@{/displayComments/{comments}(comments=${#uris.escapePathSegment(excerpt.comments)})}">Comments</a>
 						<a
-						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{comments}/{description}/(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title=${excerpt.title}, text=${excerpt.text}, comments=${#uris.escapePathSegment(excerpt.comments)}, description=${descriptions[iter.index]})}">Edit</a>
+						th:href="@{/edit/{excerptID}/{author}/{title}/{text}/{comments}/{description}/(excerptID=${excerpt.excerptID}, author=${author.name}, title=${excerpt.title}, text=${excerpt.text}, comments=${#uris.escapePathSegment(excerpt.comments)}, description=${descriptions[iter.index]})}">Edit</a>
 						<a
-						th:href="@{/delete/{excerptID}/{author}{title}/{tag}/(excerptID=${excerpt.excerptID}, author=${excerpt.author}, title='title', tag='tag')}"
+						th:href="@{/delete/{excerptID}/{author}/{title}/{tag}/(excerptID=${excerpt.excerptID}, author=${author.name}, title='title', tag='tag')}"
 						onclick="return confirm('Are you sure you want to delete this excerpt?');">Delete</a></td>
 				</tr>
 			</tbody>

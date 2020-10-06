@@ -7,7 +7,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.excerpts.springboot.domain.Author;
+import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.mappers.AuthorMapper;
+import com.excerpts.springboot.mappers.ExcerptMapper;
 
 @Component("authorDAO")
 public class AuthorDAO implements DAO<Author> {
@@ -23,7 +25,8 @@ public class AuthorDAO implements DAO<Author> {
 		if (excerptID == 0) {
 
 			// fetch the ID of the newly created excerpt
-			String getExcerptIDSQL = "SELECT LAST_INSERT_ID()";
+			//String getExcerptIDSQL = "SELECT LAST_INSERT_ID()";
+			String getExcerptIDSQL = "SELECT excerptID FROM Excerpt ORDER BY excerptID DESC LIMIT 1";
 			excerptID = jdbcTemplate.queryForObject(getExcerptIDSQL, Integer.class);
 
 		} else {
@@ -79,8 +82,10 @@ public class AuthorDAO implements DAO<Author> {
 	@Override
 	public List<Author> getByTag(String... params) {
 
-		// TODO once there is an option to include multiple authors per db entry
-		return null;
+		String description = params[0];
+		String SQL = "SELECT am.excerptID, a.name from Author AS a LEFT JOIN Authormap AS am ON a.authorID = am.authorID LEFT JOIN Tagmap AS tm ON am.excerptID = tm.excerptID LEFT JOIN Tag as t ON tm.tagID = t.tagID WHERE t.description = ?";
+		List<Author> authors = jdbcTemplate.query(SQL, new String[] { description }, new AuthorMapper());
+		return authors;
 	}
 
 	@Override

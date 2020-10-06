@@ -76,15 +76,13 @@ input[type=submit] {
 		<form th:action="@{getAllTags}" method="post" id="tags"></form>
 		<table class="table2">
 			<tr>
-				<td><a href="getAllExcerpts">display all excerpts in the
-						database</a></td>
+				<td><a href="getAllExcerpts">display all excerpts</a></td>
 			</tr>
 			<tr>
 				<td><a href="createExcerpt">create a new excerpt</a></td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="show all tags in the database"
-					form="tags" /></td>
+				<td><input type="submit" value="show all tags" form="tags" /></td>
 			</tr>
 		</table>
 		<br>
@@ -107,8 +105,7 @@ input[type=submit] {
 			</tr>
 			<tr>
 				<td>enter the author's name</td>
-				<td><input type="text" th:field="${author.name}"
-					form="name" /></td>
+				<td><input type="text" th:field="${author.name}" form="name" /></td>
 				<td><button type="submit" name="parameter" value="name"
 						form="name">submit</button></td>
 				<td><button type="reset" form="name">reset</button></td>
@@ -142,8 +139,7 @@ input[type=submit] {
 	<div>
 		<table class="table2">
 			<tr>
-				<td><a href="getAllOutlines">display all outlines in the
-						database</a></td>
+				<td><a href="getAllOutlines">display all outlines</a></td>
 			</tr>
 			<tr>
 				<td><a href="createOutline">create a new outline</a></td>

@@ -37,7 +37,7 @@ public class ExcerptController {
 	@Autowired
 	@Qualifier("excerptDAO")
 	private ParameterDAO<Excerpt> excerptDAO;
-	
+
 	@Autowired
 	@Qualifier("tagDAO")
 	private ParameterDAO<Tag> tagDAO;
@@ -87,6 +87,7 @@ public class ExcerptController {
 		String comments = excerpt.getComments();
 		String description = tag.getDescription();
 
+		//excerpt must be saved first because authorMap and tagMap will need its excerptID to be saved
 		excerptDAO.save(excerptID, title, text, comments);
 		authorDAO.save(excerptID, name);
 		tagDAO.save(excerptID, description);
@@ -154,9 +155,8 @@ public class ExcerptController {
 	// retrieve all excerpts by the specified author
 	@RequestMapping(value = "/getByParameter", method = { RequestMethod.POST,
 			RequestMethod.GET }, params = "parameter=name")
-	public String processAuthor(@RequestParam(name = "name") String name,
-			@ModelAttribute("author") Author author, BindingResult result, @ModelAttribute("tag") Tag tag,
-			Model model) {
+	public String processAuthor(@RequestParam(name = "name") String name, @ModelAttribute("author") Author author,
+			BindingResult result, @ModelAttribute("tag") Tag tag, Model model) {
 
 		authorValidator.validate(author, result);
 
@@ -175,6 +175,7 @@ public class ExcerptController {
 		List<Excerpt> excerpts = ExcerptHelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
+		model.addAttribute("author", author);
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
@@ -195,6 +196,7 @@ public class ExcerptController {
 		}
 
 		List<Excerpt> rawExcerpts = excerptDAO.getByTag(description);
+		List<Author> names = authorDAO.getByTag(description);
 		List<Tag> tags = tagDAO.getByTag(description);
 		int count = rawExcerpts.size();
 
@@ -204,6 +206,7 @@ public class ExcerptController {
 		List<Excerpt> excerpts = ExcerptHelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
+		model.addAttribute("authors", names);
 		model.addAttribute("descriptions", descriptions);
 		model.addAttribute("count", count);
 
@@ -223,6 +226,7 @@ public class ExcerptController {
 		}
 
 		List<Excerpt> rawExcerpts = excerptDAO.getByID(excerptID);
+		List<Author> names = authorDAO.getByID(excerptID);
 		List<Tag> tags = tagDAO.getByID(excerptID);
 
 		List<String> descriptions = TagHelperClass.concatenateTags(tags);
@@ -231,6 +235,7 @@ public class ExcerptController {
 		List<Excerpt> excerpts = ExcerptHelperClass.replaceEmptyCommentsExcerpts(rawExcerpts);
 
 		model.addAttribute("excerpts", excerpts);
+		model.addAttribute("authors", names);
 		model.addAttribute("descriptions", descriptions);
 
 		return "excerpt/excerptByID";
@@ -251,6 +256,7 @@ public class ExcerptController {
 			Model model) {
 
 		excerptDAO.delete(excerptID);
+		authorDAO.delete(excerptID);
 		tagDAO.delete(excerptID);
 
 		// disambiguation to redirect to an excerpt with the given parameter
@@ -280,11 +286,12 @@ public class ExcerptController {
 
 	// displays a form for existing tag edits
 	@RequestMapping(value = "/edit/{excerptID}/{author}/{title}/{text}/{comments}/{description}")
-	public String displayEdit(Excerpt excerpt, Tag tag, Model model) {
+	public String displayEdit(Excerpt excerpt, Author author, Tag tag, Model model) {
 
 		Excerpt decodedExcerpt = ExcerptHelperClass.decode(excerpt);
 
 		model.addAttribute("excerpt", decodedExcerpt);
+		model.addAttribute("author", author);
 		model.addAttribute("tag", tag);
 
 		return "excerpt/editExcerptForm";
