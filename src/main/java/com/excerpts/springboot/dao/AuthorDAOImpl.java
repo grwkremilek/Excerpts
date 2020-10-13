@@ -12,7 +12,7 @@ import com.excerpts.springboot.mappers.AuthorMapper;
 import com.excerpts.springboot.mappers.ExcerptMapper;
 
 @Component("authorDAO")
-public class AuthorDAO implements DAO<Author> {
+public class AuthorDAOImpl implements DAO<Author> {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -100,12 +100,5 @@ public class AuthorDAO implements DAO<Author> {
 	public int countAll() {
 
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Author", Integer.class);
-	}
-
-	@Override
-	public void delete(int excerptID) {
-
-		String deleteAuthorSQL = "DELETE FROM Authormap WHERE excerptID = ?";
-		jdbcTemplate.update(deleteAuthorSQL, excerptID);
 	}
 }

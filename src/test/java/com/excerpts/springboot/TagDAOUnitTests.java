@@ -24,7 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.excerpts.springboot.dao.TagDAO;
+import com.excerpts.springboot.dao.TagDAOImpl;
 import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.domain.Tag;
 import com.excerpts.springboot.mappers.TagMapper;
@@ -43,7 +43,7 @@ class TagDAOUnitTests {
 	Tag irony = new Tag(3, "irony");
 
 	@InjectMocks
-	private TagDAO tagDAO = new TagDAO();
+	private TagDAOImpl tagDAO = new TagDAOImpl();
 
 	@Mock
 	private JdbcTemplate mockJdbcTemplate;
@@ -114,7 +114,7 @@ class TagDAOUnitTests {
 
 	@Test
 	public void shouldgetTagsByID() throws Exception {
-		
+
 		List<Tag> result = new ArrayList<>();
 		result.add(history);
 		result.add(style);
@@ -132,13 +132,4 @@ class TagDAOUnitTests {
 		assertEquals(3, tagDAO.countAll());
 
 	}
-
-	@Test
-	public void shouldDeleteTags() throws Exception {
-		
-		tagDAO.delete(1);
-		verify(mockJdbcTemplate, times(1)).update(anyString(), eq(1));
-
-	}
-
 }

@@ -24,7 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.excerpts.springboot.dao.ExcerptDAO;
+import com.excerpts.springboot.dao.ExcerptDAOImpl;
 import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.mappers.ExcerptMapper;
 
@@ -50,7 +50,7 @@ class ExcerptDAOUnitTests {
 			"comment no 7");
 
 	@InjectMocks
-	private ExcerptDAO excerptDAO = new ExcerptDAO();
+	private ExcerptDAOImpl excerptDAO = new ExcerptDAOImpl();
 
 	@Mock
 	private JdbcTemplate mockJdbcTemplate;

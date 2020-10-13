@@ -11,7 +11,7 @@ import com.excerpts.springboot.domain.Outline;
 import com.excerpts.springboot.mappers.OutlineMapper;
 
 @Repository
-public class OutlineDAO implements DAO<Outline> {
+public class OutlineDAOImpl implements DAO<Outline> {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -77,13 +77,5 @@ public class OutlineDAO implements DAO<Outline> {
 	public int countAll() {
 
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Outline", Integer.class);
-	}
-
-	@Override
-	public void delete(int outlineID) {
-
-		String SQL = "DELETE FROM Outline WHERE outlineID = ?";
-		jdbcTemplate.update(SQL, outlineID);
-
 	}
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.excerpts.springboot.dao.DAO;
+import com.excerpts.springboot.dao.ExcerptDAO;
 import com.excerpts.springboot.dao.ParameterDAO;
 import com.excerpts.springboot.domain.Author;
 import com.excerpts.springboot.domain.Excerpt;
@@ -36,7 +37,7 @@ public class ExcerptController {
 
 	@Autowired
 	@Qualifier("excerptDAO")
-	private ParameterDAO<Excerpt> excerptDAO;
+	private ExcerptDAO excerptDAO;
 
 	@Autowired
 	@Qualifier("tagDAO")
@@ -87,7 +88,8 @@ public class ExcerptController {
 		String comments = excerpt.getComments();
 		String description = tag.getDescription();
 
-		//excerpt must be saved first because authorMap and tagMap will need its excerptID to be saved
+		// excerpt must be saved first because authorMap and tagMap will need its
+		// excerptID to be saved
 		excerptDAO.save(excerptID, title, text, comments);
 		authorDAO.save(excerptID, name);
 		tagDAO.save(excerptID, description);
@@ -256,14 +258,12 @@ public class ExcerptController {
 			Model model) {
 
 		excerptDAO.delete(excerptID);
-		authorDAO.delete(excerptID);
-		tagDAO.delete(excerptID);
 
 		// disambiguation to redirect to an excerpt with the given parameter
 		if (!author.equals("author") && title.equals("title") && tag.equals("tag")) {
 
-			redirectAttributes.addAttribute("author", author);
-			redirectAttributes.addAttribute("parameter", "author");
+			redirectAttributes.addAttribute("name", author);
+			redirectAttributes.addAttribute("parameter", "name");
 
 		} else if (!title.equals("title") && author.equals("author") && tag.equals("tag")) {
 
@@ -281,7 +281,7 @@ public class ExcerptController {
 			redirectAttributes.addAttribute("parameter", "excerptID");
 		}
 
-		return "redirect:/excerpt/getByParameter";
+		return "redirect:/getByParameter";
 	}
 
 	// displays a form for existing tag edits

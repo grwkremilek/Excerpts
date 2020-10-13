@@ -19,6 +19,4 @@ public interface DAO<T> {
 
 	public int countAll();
 
-	public void delete(int id);
-
 }

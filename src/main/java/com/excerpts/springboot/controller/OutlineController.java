@@ -24,7 +24,7 @@ import com.excerpts.springboot.validators.TagValidator;
 public class OutlineController {
 	
 	@Autowired
-	@Qualifier("outlineDAO")
+	@Qualifier("outlineDAOImpl")
 	private DAO<Outline> outlineDAO;
 	
 	@Autowired

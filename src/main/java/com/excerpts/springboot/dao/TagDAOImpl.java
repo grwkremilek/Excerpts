@@ -10,7 +10,7 @@ import com.excerpts.springboot.domain.Tag;
 import com.excerpts.springboot.mappers.TagMapper;
 
 @Component("tagDAO")
-public class TagDAO implements ParameterDAO<Tag> {
+public class TagDAOImpl implements ParameterDAO<Tag> {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -63,6 +63,7 @@ public class TagDAO implements ParameterDAO<Tag> {
 		}
 	}
 
+	//returns all tags that are being used in excerpts
 	@Override
 	public List<Tag> getAll() {
 
@@ -98,6 +99,7 @@ public class TagDAO implements ParameterDAO<Tag> {
 		return tags;
 	}
 
+	//TODO count only active tags
 	@Override
 	public int countAll() {
 		
@@ -105,19 +107,9 @@ public class TagDAO implements ParameterDAO<Tag> {
 	}
 
 	@Override
-	public void delete(int excerptID) {
-
-		String deleteTagSQL = "DELETE FROM Tagmap WHERE excerptID = ?";
-		jdbcTemplate.update(deleteTagSQL, excerptID);
-	}
-
-	@Override
 	public List<Tag> getByAuthor(String... params) {
 
 		String name = params[0].trim();
-		// String SQL = "SELECT e.excerptID, t.description from Excerpt AS e LEFT JOIN
-		// Tagmap AS m ON m.excerptID = e.excerptID LEFT JOIN Tag AS t ON t.tagID =
-		// m.tagID WHERE e.author = ? ORDER BY e.title";
 		String SQL = "SELECT tm.excerptID, t.description from Tag AS t LEFT JOIN Tagmap AS tm ON t.tagID = tm.tagID LEFT JOIN Authormap AS am ON tm.excerptID = am.excerptID LEFT JOIN Author as a ON am.authorID = a.authorID WHERE a.name = ?";
 		List<Tag> tags = jdbcTemplate.query(SQL, new String[] { name }, new TagMapper());
 		return tags;
