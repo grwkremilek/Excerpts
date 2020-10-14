@@ -3,13 +3,9 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
+<link rel="stylesheet" type="text/css" href="css/searchResults.css" />
 <meta charset="utf-8" />
 <title>List of all excerpts</title>
-<style>
-table th, table td {
-	padding: 5px;
-}
-</style>
 </head>
 
 <body>
@@ -23,28 +19,32 @@ table th, table td {
 			<span th:text="${count}">number of excerpts </span> excerpts were
 			found
 		</p>
-		<table
-			style="width: 100%; border: 1px solid black; border-collapse: collapse;">
-			<thead style="border: 1px solid black;">
-				<tr>
-					<th>ID</th>
-					<th>Author</th>
-					<th>Title</th>
-					<th>Text</th>
-					<th>Tags</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="excerpt, iter : ${excerpts}">
-					<td style="border: 1px solid black;" th:text="${excerpt.excerptID}">ExcerptID</td>
-					<td style="border: 1px solid black;" th:text="${authors[iter.index]}">Author</td>
-					<td style="border: 1px solid black;" th:text="${excerpt.title}">Title</td>
-					<td style="border: 1px solid black;" th:text="${excerpt.text}">Text</td>
-					<td style="border: 1px solid black;"
-						th:text="${descriptions[iter.index]}">Tags</td>
-				</tr>
-			</tbody>
-		</table>
+		<div id="div1">
+			<table
+				style="width: 100%; border: 1px solid black; border-collapse: collapse;">
+				<thead style="border: 1px solid black;">
+					<tr>
+						<th>ID</th>
+						<th>Author</th>
+						<th>Title</th>
+						<th>Text</th>
+						<th>Tags</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="excerpt, iter : ${excerpts}">
+						<td style="border: 1px solid black;"
+							th:text="${excerpt.excerptID}">ExcerptID</td>
+						<td style="border: 1px solid black;"
+							th:text="${authors[iter.index]}">Author</td>
+						<td style="border: 1px solid black;" th:text="${excerpt.title}">Title</td>
+						<td style="border: 1px solid black;" th:text="${excerpt.text}">Text</td>
+						<td style="border: 1px solid black;"
+							th:text="${descriptions[iter.index]}">Tags</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </body>
 </html>

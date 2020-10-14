@@ -3,13 +3,9 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
+<link rel="stylesheet" type="text/css" href="css/searchResults.css" />
 <meta charset="utf-8" />
 <title>List by Tag</title>
-<style>
-table th, table td {
-	padding: 5px;
-}
-</style>
 </head>
 
 <body>
@@ -24,26 +20,29 @@ table th, table td {
 			<span th:text="${tag.description}">name of the tag</span>: <span
 				th:text="${count}">number of outlines </span> outlines were found
 		</p>
-		<table
-			style="width: 100%; border: 1px solid black; border-collapse: collapse;">
-			<thead>
-				<tr>
-					<th>OutlineId</th>
-					<th>Plot</th>
-					<th>Tags</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="outline, iter : ${outlines}">
-					<td style="border: 1px solid black;" th:text="${outline.outlineID}">ExcerptId</td>
-					<td style="border: 1px solid black;" th:text="${outline.plot}">Author</td>
-					<td style="border: 1px solid black;"
-						th:text="${descriptions[iter.index]}">Tags</td>
-					<td style="border: 1px solid black;"></td>
-				</tr>
-			</tbody>
-		</table>
+		<div id="div1">
+			<table
+				style="width: 100%; border: 1px solid black; border-collapse: collapse;">
+				<thead>
+					<tr>
+						<th>OutlineId</th>
+						<th>Plot</th>
+						<th>Tags</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="outline, iter : ${outlines}">
+						<td style="border: 1px solid black;"
+							th:text="${outline.outlineID}">ExcerptId</td>
+						<td style="border: 1px solid black;" th:text="${outline.plot}">Author</td>
+						<td style="border: 1px solid black;"
+							th:text="${descriptions[iter.index]}">Tags</td>
+						<td style="border: 1px solid black;"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </body>
 </html>

@@ -9,29 +9,14 @@
 </head>
 
 <body>
-	<div align="right">
-		<form th:action="@{truncateTables}" id="truncate"></form>
-		<table class="table1">
-			<tr>
-				<td><input type="submit" value="delete all entries in the db"
-					form="truncate" class="btn btn-danger"
-					th:data-confirm-delete="|Are you sure you want to delete all entries in the database?|"
-					onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false" /></td>
-			</tr>
-		</table>
-	</div>
-	<br>
-	<div align="left">
-		<form th:action="@{getAllTags}" method="post" id="tags"></form>
-		<table class="table2">
+	<div id="div1">
+	<h2>EXCERPTS</h2>
+		<table class="table">
 			<tr>
 				<td><a href="getAllExcerpts">display all excerpts</a></td>
 			</tr>
 			<tr>
 				<td><a href="createExcerpt">create a new excerpt</a></td>
-			</tr>
-			<tr>
-				<td><input type="submit" value="show all tags" form="tags" /></td>
 			</tr>
 		</table>
 		<br>
@@ -41,7 +26,7 @@
 			id="name"></form>
 		<form action="#" th:action="@{/getByParameter}" method="post" id="tag"></form>
 		<form action="#" th:action="@{/getByParameter}" method="post" id="id"></form>
-		<table class="table2">
+		<table class="table">
 			<tr>
 				<td>enter the name of the book</td>
 				<td><input type="text" th:field="${excerpt.title}" form="title" /></td>
@@ -84,14 +69,41 @@
 					th:errors="${excerpt.excerptID}"></td>
 			</tr>
 		</table>
+
+
 	</div>
-	<div>
-		<table class="table2">
+
+	<div id="div2">
+	<h2>OUTLINES</h2>
+		<table class="table">
 			<tr>
 				<td><a href="getAllOutlines">display all outlines</a></td>
 			</tr>
 			<tr>
 				<td><a href="createOutline">create a new outline</a></td>
+			</tr>
+		</table>
+	</div>
+
+	<div id="div3">
+	<h2>VISUALIZATIONS</h2>
+		<form th:action="@{getAllTags}" method="post" id="tags"></form>
+		<table class="table2">
+			<tr>
+				<td><input type="submit" value="show all tags" form="tags" /></td>
+			</tr>
+		</table>
+	</div>
+
+	<div id="div4">
+	<h2>MAINTENANCE</h2>
+		<form th:action="@{truncateTables}" id="truncate"></form>
+		<table class="table">
+			<tr>
+				<td><input type="submit" value="delete all entries in the db"
+					form="truncate" class="btn btn-danger"
+					th:data-confirm-delete="|Are you sure you want to delete all entries in the database?|"
+					onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false" /></td>
 			</tr>
 		</table>
 	</div>
