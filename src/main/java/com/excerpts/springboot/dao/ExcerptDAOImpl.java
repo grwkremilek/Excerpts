@@ -55,6 +55,15 @@ public class ExcerptDAOImpl implements ExcerptDAO {
 	}
 
 	@Override
+	public List<Excerpt> getByAuthor(String... params) {
+
+		String name = params[0];
+		String SQL = "SELECT e.* from Excerpt AS e LEFT JOIN Authormap AS m ON m.excerptID = e.excerptID LEFT JOIN Author AS a ON a.authorID = m.authorID WHERE a.name = ?";
+		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { name }, new ExcerptMapper());
+		return excerpts;
+	}
+
+	@Override
 	public List<Excerpt> getByTag(String... params) {
 
 		String description = params[0];
@@ -69,12 +78,12 @@ public class ExcerptDAOImpl implements ExcerptDAO {
 		String SQL = "SELECT * FROM Excerpt WHERE excerptID = ?";
 
 		try {
-			
+
 			List<Excerpt> excerpts = jdbcTemplate.query(SQL, new Object[] { excerptID }, new ExcerptMapper());
 			return excerpts;
-			
+
 		} catch (EmptyResultDataAccessException e) {
-			
+
 			return null;
 		}
 	}
@@ -85,7 +94,8 @@ public class ExcerptDAOImpl implements ExcerptDAO {
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Excerpt", Integer.class);
 	}
 
-	//deletes the excerpt and all the mappings (the tags and author do not get deleted in Tag, Author)
+	// deletes the excerpt and all the mappings (the tags and author do not get
+	// deleted in Tag, Author)
 	@Override
 	public void delete(int excerptID) {
 
@@ -93,12 +103,4 @@ public class ExcerptDAOImpl implements ExcerptDAO {
 		jdbcTemplate.update(excerptSQL, excerptID);
 	}
 
-	@Override
-	public List<Excerpt> getByAuthor(String... params) {
-
-		String name = params[0];
-		String SQL = "SELECT e.* from Excerpt AS e LEFT JOIN Authormap AS m ON m.excerptID = e.excerptID LEFT JOIN Author AS a ON a.authorID = m.authorID WHERE a.name = ?";
-		List<Excerpt> excerpts = jdbcTemplate.query(SQL, new String[] { name }, new ExcerptMapper());
-		return excerpts;
-	}
 }

@@ -35,5 +35,4 @@ public class Author {
 	public String toString() {
 		return "Author [excerptID=" + excerptID + ", name=" + name + "]";
 	}
-
 }

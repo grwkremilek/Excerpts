@@ -7,9 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.excerpts.springboot.domain.Author;
-import com.excerpts.springboot.domain.Excerpt;
 import com.excerpts.springboot.mappers.AuthorMapper;
-import com.excerpts.springboot.mappers.ExcerptMapper;
 
 @Component("authorDAO")
 public class AuthorDAOImpl implements DAO<Author> {

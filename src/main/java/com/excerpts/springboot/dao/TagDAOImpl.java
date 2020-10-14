@@ -63,7 +63,7 @@ public class TagDAOImpl implements ParameterDAO<Tag> {
 		}
 	}
 
-	//returns all tags that are being used in excerpts
+	// returns all tags that are being used in excerpts
 	@Override
 	public List<Tag> getAll() {
 
@@ -81,7 +81,16 @@ public class TagDAOImpl implements ParameterDAO<Tag> {
 		return tags;
 	}
 
-	//returns all tags that co-occur with the searched tag in the given entries
+	@Override
+	public List<Tag> getByAuthor(String... params) {
+
+		String name = params[0].trim();
+		String SQL = "SELECT tm.excerptID, t.description from Tag AS t LEFT JOIN Tagmap AS tm ON t.tagID = tm.tagID LEFT JOIN Authormap AS am ON tm.excerptID = am.excerptID LEFT JOIN Author as a ON am.authorID = a.authorID WHERE a.name = ?";
+		List<Tag> tags = jdbcTemplate.query(SQL, new String[] { name }, new TagMapper());
+		return tags;
+	}
+
+	// returns all tags that co-occur with the searched tag in the given entries
 	@Override
 	public List<Tag> getByTag(String... params) {
 
@@ -99,19 +108,10 @@ public class TagDAOImpl implements ParameterDAO<Tag> {
 		return tags;
 	}
 
-	//TODO count only active tags
+	// TODO count only active tags
 	@Override
 	public int countAll() {
-		
+
 		return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Tag", Integer.class);
-	}
-
-	@Override
-	public List<Tag> getByAuthor(String... params) {
-
-		String name = params[0].trim();
-		String SQL = "SELECT tm.excerptID, t.description from Tag AS t LEFT JOIN Tagmap AS tm ON t.tagID = tm.tagID LEFT JOIN Authormap AS am ON tm.excerptID = am.excerptID LEFT JOIN Author as a ON am.authorID = a.authorID WHERE a.name = ?";
-		List<Tag> tags = jdbcTemplate.query(SQL, new String[] { name }, new TagMapper());
-		return tags;
 	}
 }
